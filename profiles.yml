@@ -1,0 +1,12 @@
+nhl_dw:
+  outputs:
+    dev:
+      dbname: postgres
+      host: localhost
+      pass: pg12345
+      port: 5432
+      schema: nhl
+      threads: 1
+      type: postgres
+      user: postgres
+  target: dev

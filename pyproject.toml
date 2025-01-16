@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "nhl-dw"
+version = "0.1.0"
+description = ""
+authors = ["lksprado <lks-prado@live.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+dbt-core = "^1.9.1"
+dbt-postgres = "^1.9.0"
+requests = "^2.32.3"
+polars = "^1.19.0"
+flatten-json = "^0.1.14"
+pandas = "^2.2.3"
+flatdict = "^4.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -7,7 +7,6 @@ id,franchiseId,fullName,leagueId,rawTricode,triCode
 48,23.0,Kansas City Scouts,133,KCS,KCS
 2,22.0,New York Islanders,133,NYI,NYI
 36,3.0,Ottawa Senators (1917),133,SEN,SEN
-70,,To be determined,133,TBD,TBD
 11,35.0,Atlanta Thrashers,133,ATL,ATL
 45,3.0,St. Louis Eagles,133,SLE,SLE
 33,28.0,Winnipeg Jets (1979),133,WIN,WIN
@@ -43,7 +42,6 @@ id,franchiseId,fullName,leagueId,rawTricode,triCode
 31,15.0,Minnesota North Stars,133,MNS,MNS
 26,14.0,Los Angeles Kings,133,LAK,LAK
 23,20.0,Vancouver Canucks,133,VAN,VAN
-99,,NHL,133,NHL,NHL
 30,37.0,Minnesota Wild,133,MIN,MIN
 43,7.0,Montreal Maroons,133,MMR,MMR
 49,13.0,Cleveland Barons,133,CLE,CLE

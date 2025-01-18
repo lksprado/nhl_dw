@@ -10,7 +10,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-from app.generic_fetch_results import make_request, save_json
+from app.extraction.generic_get_results import make_request, save_json
 
 DIR = "./api_data"
 

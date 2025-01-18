@@ -14,19 +14,29 @@
 
 import os
 import sys
-
+import pandas as pd
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../..')))
-from app.generic_fetch_results import make_request, save_json
+from app.extraction.generic_get_results import make_request, save_json
 
-DIR = "./api_data"
+DIR = "data/json_data/raw_roster_season"
 
-URL = 'https://api-web.nhle.com/v1/roster/TOR/20232024'
+# URL = 'https://api-web.nhle.com/v1/roster/TOR/20232024'
+URL = 'https://api-web.nhle.com/v1/roster/{team_id}/{season_id}'
+
+def team_list(file_name)-> list:
+    df = pd.read_csv(file_name)
+    urls = [URL.format(team_id=row['team_id'], season_id=row['season_id']) for index, row in df.iterrows()]
+    return urls 
 
 def fetch_data(url, file_name: str, json_dir):
     data = make_request(url)
     save_json(file_name, data, json_dir)
 
 if __name__=="__main__":
-    fetch_data(URL,"roster_per_season", DIR)
-
-
+    urls = team_list('data/csv_data/processed/parameters_team_season.csv')
+    for url in urls:
+        team_id = url.split('/')[-2]
+        season_id = url.split('/')[-1]
+        file_name = f"roster_{team_id}_{season_id}"
+        fetch_data(url, file_name, DIR)
+        print(f"Data fetched for {team_id} in season {season_id}")

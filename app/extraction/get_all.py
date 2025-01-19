@@ -180,7 +180,7 @@ def get_current_goalie_stats_leaders():
     max_season_id = df_parameter["season_id"].max()
     url = URL.format(season_id=max_season_id)
     data, _ = make_request(url)
-    save_json(f"stats_current_goalies_{max_season_id}", data, OUTPUT_DIR)
+    save_json(f"stats_goalies_{max_season_id}", data, OUTPUT_DIR)
 
     # TO GET HISTORIC DATA
     # urls = [URL.format(season_id=row.season_id) for row in df_parameter.itertuples()]
@@ -213,7 +213,7 @@ def get_current_skater_stats_leaders():
     max_season_id = df_parameter["season_id"].max()
     url = URL.format(season_id=max_season_id)
     data, _ = make_request(url)
-    save_json(f"stats_current_skaters_{max_season_id}", data, OUTPUT_DIR)
+    save_json(f"stats_skaters_{max_season_id}", data, OUTPUT_DIR)
 
     # TO GET HISTORIC DATA
     # urls = [URL.format(season_id=row.season_id) for row in df_parameter.itertuples()]
@@ -314,7 +314,7 @@ def get_club_stats_now(season_type=2):
         )
         data, _ = make_request(url)
         save_json(
-            f"club_stats_{team_id}_{max_season_id}_{season_type}", data, OUTPUT_DIR
+            f"stats_club_{team_id}_{max_season_id}_{season_type}", data, OUTPUT_DIR
         )
 
     # TO GET HISTORIC DATA

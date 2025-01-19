@@ -1,9 +1,13 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import json
+
 import requests
+
 from src.logger import logger
-import json 
+
 
 def make_request(url: str, retries=2):
     """
@@ -17,15 +21,16 @@ def make_request(url: str, retries=2):
     for attempt in range(retries):
         try:
             response = requests.get(url, timeout=5)
-            response.raise_for_status() 
+            response.raise_for_status()
             return response.json(), response.url
         except requests.exceptions.RequestException as e:
             logger.error(f"Attempt {attempt + 1} failed: {e} - {url}")
             if attempt == retries - 1:
                 logger.error(f"All {retries} attempts failed.")
                 return None, None
-        
-def save_json(file_name: str,data, output_json_dir):
+
+
+def save_json(file_name: str, data, output_json_dir):
     """
     Saves data to a JSON file.
     Args:
@@ -41,9 +46,11 @@ def save_json(file_name: str,data, output_json_dir):
             json.dump(data, json_file, indent=4, ensure_ascii=False)
         logger.info(f"JSON saved at: {file_path}")
     except Exception as e:
-            logger.error(f"Failed to save JSON: {e}")
-            
+        logger.error(f"Error on save: {e}")
+
 
 if __name__ == "__main__":
-    data, link  = make_request('https://api-web.nhle.com/v1/goalie-stats-leaders/current?&limit=-1')
-    print(link.split('/')[-2])
+    data, link = make_request(
+        "https://api-web.nhle.com/v1/goalie-stats-leaders/current?&limit=-1"
+    )
+    print(link.split("/")[-2])

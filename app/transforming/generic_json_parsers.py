@@ -1,16 +1,19 @@
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..'))) 
-import polars as pl
-from src.logger import logger
-import pandas as pd 
-from utils.time_tracker import track_time
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import glob
 import json
 
+import pandas as pd
+import polars as pl
+
+from src.logger import logger
+from utils.time_tracker import track_time
+
 
 @track_time
-def parsing_json_pandas (filename:str, ls, output_dir:str):
+def parsing_json_pandas(filename: str, ls, output_dir: str):
     """
     Parses json and saves as csv using Pandas lib \n
     filename:
@@ -21,14 +24,15 @@ def parsing_json_pandas (filename:str, ls, output_dir:str):
         Provide output folder for csv file
     """
     csv_filename = os.path.basename(filename)
-    csv_filename = csv_filename.replace('.json','.csv')
+    csv_filename = csv_filename.replace(".json", ".csv")
     data = pd.read_json(filename)
     if isinstance(data, pd.DataFrame):
-        parsed_data = data 
+        parsed_data = data
     elif isinstance(data, pd.Series):
         parsed_data = pd.json_normalize(data[ls])
-        
-    parsed_data.to_csv(f'{output_dir}/{csv_filename}', index=False)
+
+    parsed_data.to_csv(f"{output_dir}/{csv_filename}", index=False)
+
 
 @track_time
 def parsing_json_pandas_2(filename: str, output_dir: str):
@@ -40,8 +44,8 @@ def parsing_json_pandas_2(filename: str, output_dir: str):
         Provide output folder for csv file
     """
     csv_filename = os.path.basename(filename)
-    csv_filename = csv_filename.replace('.json', '.csv')
-    file_id = csv_filename.replace('.csv', '')
+    csv_filename = csv_filename.replace(".json", ".csv")
+    file_id = csv_filename.replace(".csv", "")
     try:
         with open(filename) as json_data:
             data = json.load(json_data)
@@ -49,15 +53,17 @@ def parsing_json_pandas_2(filename: str, output_dir: str):
     except ValueError as e:
         print(f"Error reading JSON file {filename}: {e}")
         return
-    
+
     # Adicionando verificações e mensagens de log
     print(f"Processing file: {filename}")
-    
+
     all_stats = []
 
     if isinstance(data, dict):
         # Elementos que não são dicionários
-        non_dict_elements = {key: value for key, value in data.items() if not isinstance(value, list)}
+        non_dict_elements = {
+            key: value for key, value in data.items() if not isinstance(value, list)
+        }
 
         # Processar elementos que são listas de dicionários
         for key, value in data.items():
@@ -66,37 +72,42 @@ def parsing_json_pandas_2(filename: str, output_dir: str):
                     stats = pd.json_normalize(value)
                     for col, val in non_dict_elements.items():
                         stats[col] = val
-                    stats['stats'] = key
-                    stats['filename'] = file_id
+                    stats["stats"] = key
+                    stats["filename"] = file_id
                     all_stats.append(stats)
                 except Exception as e:
                     print(f"Erro ao processar posição {key}: {e}")
     elif isinstance(data, list):
         for item in data:
             if isinstance(item, dict):
-                non_dict_elements = {key: value for key, value in item.items() if not isinstance(value, list)}
+                non_dict_elements = {
+                    key: value
+                    for key, value in item.items()
+                    if not isinstance(value, list)
+                }
                 for key, value in item.items():
                     if isinstance(value, list):
                         try:
                             stats = pd.json_normalize(value)
                             for col, val in non_dict_elements.items():
                                 stats[col] = val
-                            stats['stats'] = key
-                            stats['filename'] = file_id
+                            stats["stats"] = key
+                            stats["filename"] = file_id
                             all_stats.append(stats)
                         except Exception as e:
                             print(f"Erro ao processar posição {key}: {e}")
-                            
+
     if all_stats:
         # Concatenar todos os DataFrames em um único DataFrame
         parsed_data = pd.concat(all_stats, ignore_index=True, sort=True)
     else:
         raise ValueError("No player data found in the JSON file")
 
-    parsed_data.to_csv(f'{output_dir}/{csv_filename}', index=False)
+    parsed_data.to_csv(f"{output_dir}/{csv_filename}", index=False)
+
 
 @track_time
-def parsing_json_polars(filename:str, ls:str, output_dir:str):
+def parsing_json_polars(filename: str, ls: str, output_dir: str):
     """
     Parses json and saves as csv using Polars lib
     filename:
@@ -107,11 +118,11 @@ def parsing_json_polars(filename:str, ls:str, output_dir:str):
         Provide output folder for csv file
     """
     csv_filename = os.path.basename(filename)
-    csv_filename = csv_filename.replace('.json','.csv')
+    csv_filename = csv_filename.replace(".json", ".csv")
 
     data = pl.read_json(filename)
     df = pl.DataFrame(data[ls]).explode(ls)
-    
+
     def unnest_all(df, separator="."):
         def _unnest_all(struct_columns):
             return df.with_columns(
@@ -134,12 +145,10 @@ def parsing_json_polars(filename:str, ls:str, output_dir:str):
 
     # Desanexar as estruturas
     df_unnested = unnest_all(df)
-    df_unnested.columns = [col.replace(f"{ls}.", '') for col in df_unnested.columns]
-    df_unnested.write_csv(f'{output_dir}/{csv_filename}')
+    df_unnested.columns = [col.replace(f"{ls}.", "") for col in df_unnested.columns]
+    df_unnested.write_csv(f"{output_dir}/{csv_filename}")
 
 
 if __name__ == "__main__":
-    file = 'data/json_data/raw_goalie_stats/raw_stats_current_goalies_20242025.json'
-    parsing_json_pandas_2(file,'teste')
-        
-        
+    file = "data/json_data/raw_goalie_stats/raw_stats_current_goalies_20242025.json"
+    parsing_json_pandas_2(file, "teste")

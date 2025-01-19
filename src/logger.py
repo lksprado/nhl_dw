@@ -1,6 +1,5 @@
-import logging 
+import logging
 from logging.handlers import RotatingFileHandler
-
 
 logger = logging.getLogger(__name__)
 
@@ -18,5 +17,3 @@ rotating_file_handler.setFormatter(logging_format)
 
 logger.addHandler(console_handler)
 logger.addHandler(rotating_file_handler)
-
-

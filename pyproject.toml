@@ -14,8 +14,24 @@ polars = "^1.19.0"
 flatten-json = "^0.1.14"
 pandas = "^2.2.3"
 flatdict = "^4.0.1"
+pytest = "^8.3.4"
+python-dotenv = "^1.0.1"
+black = "^24.10.0"
+isort = "^5.13.2"
+taskipy = "^1.14.1"
+pandera = "^0.22.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+[tool.taskipy.tasks]
+format = """
+isort . 
+black .
+"""
+kill = "kill -9 $(lsof -t -i :8000)"
+test = "pytest -v"
+run = """ python3 app/main.py """
+doc = "mkdocs serve"
+

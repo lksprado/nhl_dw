@@ -410,17 +410,6 @@ def get_game_log(season_type=2):
 
         print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
-    # ## TO GET HISTORIC DATA
-    # urls = [URL.format(player_id=row.player_id , season_id=row.season_id, season_step=season_type) for row in df_parameter.itertuples()]
-    # for url in urls:
-    #     player_id = url.split('/')[-4]
-    #     season_id = url.split('/')[-2]
-    #     file_name = f"game_log_{player_id}_{season_id}_{season_step}"
-    #     data = make_request(url)
-    #     save_json(file_name, data, OUTPUT_DIR)
-    #     print(f"Data fetched for player {player_id} at season {season_id} --- {url}")
-    # print('Done')
-
 
 def fetch_and_save_player_info(player_id, url, output_dir):
     data, _ = make_request(url)
@@ -527,7 +516,7 @@ def get_skater_stats():
     max_season_id = df_parameter["season_id"].max()
     url = URL.format(season_id=max_season_id)
     data, _ = make_request(url)
-    save_json(f"stats_current_skaters_{max_season_id}", data, OUTPUT_DIR)
+    save_json(f"stats_all_skaters_{max_season_id}", data, OUTPUT_DIR)
 
     # # TO GET HISTORIC DATA
     # urls = [URL.format(season_id=row.value) for row in df_parameter.itertuples()]
@@ -572,7 +561,7 @@ def get_goalie_stats():
     max_season_id = df_parameter["season_id"].max()
     url = URL.format(season_id=max_season_id)
     data, _ = make_request(url)
-    save_json(f"stats_current_skaters_{max_season_id}", data, OUTPUT_DIR)
+    save_json(f"stats_all_goalies_{max_season_id}", data, OUTPUT_DIR)
 
     # TO GET HISTORIC DATA
     # urls = [URL.format(season_id=row.value) for row in df_parameter.itertuples()]
@@ -583,4 +572,6 @@ def get_goalie_stats():
 
 
 if __name__ == "__main__":
+    
+    #get_skater_stats()
     pass

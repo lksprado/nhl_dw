@@ -14,7 +14,5 @@ def track_time(func):
         print(
             f"Function '{func.__name__}' took {minutes} minute(s) and {seconds:.2f} second(s)."
         )
-
         return result
-
     return wrapper

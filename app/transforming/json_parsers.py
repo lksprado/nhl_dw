@@ -1,7 +1,7 @@
-# import os
-# import sys
+import os
+import sys
 
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import glob
 
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     
     ## FOLDER ###############
     # raw_goalie_stats()
-    # raw_stats_skaters()
+    raw_stats_skaters()
     # raw_club_stats()
     # raw_roster_season()
     # raw_team_season()
@@ -129,4 +129,5 @@ if __name__ == "__main__":
     # raw_all_goalie_stats()
     # raw_all_team_stats()
     # raw_game_log()
-    raw_player_info()
+    # raw_player_info()
+    pass

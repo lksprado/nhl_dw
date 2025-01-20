@@ -572,6 +572,6 @@ def get_goalie_stats():
 
 
 if __name__ == "__main__":
-    
-    #get_skater_stats()
+
+    # get_skater_stats()
     pass

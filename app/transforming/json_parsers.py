@@ -17,6 +17,7 @@ def raw_current_standings():
     input_file = "data/json_data/single/raw_standings_now.json"
     parsing_json_pandas(input_file, "standings", output)
 
+
 def raw_season_info():
     output = "data/csv_data/raw/single"
     input_file = "data/json_data/single/raw_season_info.json"
@@ -34,11 +35,11 @@ def raw_seasons():
     input_file = "data/json_data/single/raw_seasons_id.json"
     parsing_json_pandas(input_file, "data", output)
 
+
 def raw_teams():
     output = "data/csv_data/raw/single"
     input_file = "data/json_data/single/raw_teams.json"
     parsing_json_pandas(input_file, "data", output)
-
 
 
 ######## FOLDERS ##############################################################################################
@@ -50,11 +51,13 @@ def raw_goalie_stats():
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_stats_goalies")
 
+
 def raw_stats_skaters():
     pattern = "data/json_data/raw_skater_stats/raw_stats_skaters_*.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_stats_skaters")
+
 
 def raw_club_stats():
     pattern = "data/json_data/raw_club_stats/raw_stats_club_*_*.json"
@@ -62,11 +65,13 @@ def raw_club_stats():
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_club_stats")
 
+
 def raw_roster_season():
     pattern = "data/json_data/raw_roster_season/raw_roster_*_*.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_roster_season")
+
 
 def raw_team_season():
     pattern = "data/json_data/raw_roster_season/raw_team_season_*.json"
@@ -74,11 +79,13 @@ def raw_team_season():
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_team_season")
 
+
 def raw_all_skater_stats():
     pattern = "data/json_data/raw_all_skater_stats/raw_stats_all_skaters_*.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_all_skater_stats")
+
 
 def raw_all_goalie_stats():
     pattern = "data/json_data/raw_all_goalies_stats/raw_stats_all_goalies_*.json"
@@ -86,27 +93,30 @@ def raw_all_goalie_stats():
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_all_goalies_stats")
 
+
 def raw_all_team_stats():
     pattern = "data/json_data/raw_all_team_stats/raw_stats_all_teams_*.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_all_team_stats")
 
+
 def raw_game_log():
     pattern = "data/json_data/raw_game_log/raw_*_*_2.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         try:
-            parsing_json_pandas_2(input_file,"data/csv_data/raw/raw_game_log")
+            parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_game_log")
         finally:
             continue
+
 
 def raw_player_info():
     pattern = "data/json_data/raw_player_info/raw_player_*_info.json"
     input_files = glob.glob(pattern)
     for input_file in input_files:
         try:
-            parsing_json_pandas_2(input_file,"data/csv_data/raw/raw_player_info")
+            parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_player_info")
         finally:
             continue
 
@@ -118,7 +128,7 @@ if __name__ == "__main__":
     # raw_all_games_info()
     # raw_seasons()
     # raw_teams()
-    
+
     ## FOLDER ###############
     # raw_goalie_stats()
     raw_stats_skaters()

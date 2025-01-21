@@ -39,7 +39,7 @@ def processed_club_stats():
 
 @track_time
 def processed_game_log():
-    output_file_name = "all_game_log_2"
+    output_file_name = "all_game_log"
     input_csv_dir = "data/csv_data/raw/raw_game_log"
     output_dir = "data/csv_data/processed"
     df_appender_folder(output_file_name, input_csv_dir, output_dir)

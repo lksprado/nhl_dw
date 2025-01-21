@@ -354,11 +354,11 @@ def get_game_log(season_type=2):
     start_time = time.time()
 
     URL = "https://api-web.nhle.com/v1/player/{player_id}/game-log/{season_id}/{season_type}"
-
     OUTPUT_DIR = "data/json_data/raw_game_log"
 
     parameters_input = "data/csv_data/processed/parameters_players.csv"
     df_parameter = pd.read_csv(parameters_input)
+    df_parameter = df_parameter.sort_values(by=["season_id", "player_id"], ascending=False)
 
     pattern = os.path.join(OUTPUT_DIR, "raw_game_log_*_*_2.json")
     files_to_skip = glob.glob(pattern)
@@ -378,7 +378,7 @@ def get_game_log(season_type=2):
         )
     ]
 
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
         for row in df_filtered.itertuples():
             player_id = row.player_id
@@ -573,5 +573,4 @@ def get_goalie_stats():
 
 if __name__ == "__main__":
 
-    # get_skater_stats()
-    pass
+    get_game_log()

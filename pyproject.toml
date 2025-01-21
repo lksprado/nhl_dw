@@ -20,6 +20,8 @@ black = "^24.10.0"
 isort = "^5.13.2"
 taskipy = "^1.14.1"
 pandera = "^0.22.1"
+sqlalchemy = "^2.0.37"
+psycopg2-binary = "^2.9.10"
 
 
 [build-system]

@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: nhl_raw
+    database: postgres
+    schema: nhl_raw
+    tables:
+      - name: raw_player_info
+        description: "Player information and stats for latest season(s) and all time career wise "
+        columns:
+          - name: player_id
+            tests:
+              - not_null
+              - unique

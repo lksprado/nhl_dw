@@ -8,6 +8,7 @@ import glob
 from app.transforming.generic_json_parsers import (
     parsing_json_pandas,
     parsing_json_pandas_2,
+    parsing_json_pandas_3,
 )
 
 
@@ -116,7 +117,7 @@ def raw_player_info():
     input_files = glob.glob(pattern)
     for input_file in input_files:
         try:
-            parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_player_info")
+            parsing_json_pandas_3(input_file, "data/csv_data/raw/raw_player_info")
         finally:
             continue
 
@@ -138,6 +139,6 @@ if __name__ == "__main__":
     # raw_all_skater_stats()
     # raw_all_goalie_stats()
     # raw_all_team_stats()
-    raw_game_log()
-    # raw_player_info()
-    #pass
+    # raw_game_log()
+    raw_player_info()
+    # pass

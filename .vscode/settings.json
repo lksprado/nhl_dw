@@ -5,6 +5,7 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "scm.diffDecorationsGutterAction": "none",
-    "dbt.perspectiveTheme": "Vintage"
+    "dbt.perspectiveTheme": "Vintage",
+    "dbt.enableNewLineagePanel": true
 
 }

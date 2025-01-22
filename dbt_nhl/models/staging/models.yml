@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_csv__player_info
+    columns:
+      - name: player_id
+        description: "Unique player identifier"
+        tests:
+          - not_null
+          - unique

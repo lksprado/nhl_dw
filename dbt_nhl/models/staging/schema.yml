@@ -9,3 +9,9 @@ sources:
     tables:
       - name: raw_player_info
         description: "Player information and stats for latest season(s) and all time career wise"
+      - name: raw_all_team_stats
+        description: "All Stats from teams across all seasons"
+      - name: raw_all_skaters_stats
+        description: "All stats from skaters across all seasons"
+      - name: raw_all_goalies_stats
+        description: "All stats from goalies across all seasons"

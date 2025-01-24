@@ -30,4 +30,4 @@ class DataLoader:
 if __name__ == "__main__":
     dl = DataLoader()
     # dl.load_csv_to_db('data/csv_data/processed')
-    dl.load_csv_to_single("data/csv_data/processed/player_info.csv")
+    dl.load_csv_to_single("data/csv_data/processed/all_game_log.csv")

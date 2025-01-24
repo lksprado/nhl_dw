@@ -14,7 +14,7 @@ renamed as (
     {{ string_to_int('"heightInInches"') }} as height_inches,
     {{ string_to_int('"weightInPounds"') }} as weight_pounds,
     {{ string_to_int('"heightInCentimeters"') }} as height_centimeters,
-    {{ string_to_int('"weightInKilograms"') }} as wight_kg,
+    {{ string_to_int('"weightInKilograms"') }} as weight_kg,
     TO_DATE("birthDate", 'YYYY-MM-DD') as birth_date,
     "birthCountry" as birth_country,
     "birthCity.default" as birth_city,

@@ -3,7 +3,6 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-import time
 
 from app.transforming.generic_df_appenders import df_appender_folder
 from utils.time_tracker import track_time
@@ -90,9 +89,9 @@ if __name__ == "__main__":
     # processed_all_skaters_stats()
     # processed_all_team_stats()
     # processed_club_stats()
-    # processed_game_log()
+    processed_game_log()
     # processed_player_info()
     # processed_stats_goalies()
     # processed_stats_skaters()
     # processed_team_season()
-    pass
+    # pass

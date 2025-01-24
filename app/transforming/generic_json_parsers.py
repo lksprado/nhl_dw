@@ -32,7 +32,7 @@ def parsing_json_pandas(filename: str, ls, output_dir: str):
     parsed_data.to_csv(f"{output_dir}/{csv_filename}", index=False)
 
 
-@track_time
+# @track_time
 def parsing_json_pandas_2(filename: str, output_dir: str):
     """
     Parses json and saves as csv using Pandas lib
@@ -50,9 +50,6 @@ def parsing_json_pandas_2(filename: str, output_dir: str):
     except ValueError as e:
         print(f"Error reading JSON file {filename}: {e}")
         return
-
-    # Adicionando verificações e mensagens de log
-    print(f"Processing file: {filename}")
 
     all_stats = []
 
@@ -158,8 +155,3 @@ def parsing_json_polars(filename: str, ls: str, output_dir: str):
     df_unnested = unnest_all(df)
     df_unnested.columns = [col.replace(f"{ls}.", "") for col in df_unnested.columns]
     df_unnested.write_csv(f"{output_dir}/{csv_filename}")
-
-
-if __name__ == "__main__":
-    file = "data/json_data/raw_goalie_stats/raw_stats_current_goalies_20242025.json"
-    parsing_json_pandas_2(file, "teste")

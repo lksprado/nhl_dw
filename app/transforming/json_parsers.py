@@ -110,6 +110,7 @@ def raw_game_log():
             parsing_json_pandas_2(input_file, "data/csv_data/raw/raw_game_log")
         finally:
             continue
+    print("Done")
 
 
 def raw_player_info():
@@ -139,6 +140,6 @@ if __name__ == "__main__":
     # raw_all_skater_stats()
     # raw_all_goalie_stats()
     # raw_all_team_stats()
-    # raw_game_log()
-    raw_player_info()
-    # pass
+    raw_game_log()
+# raw_player_info()
+# pass

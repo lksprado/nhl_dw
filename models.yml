@@ -26,3 +26,12 @@ models:
       - name: player_id
         tests:
           - not_null
+  - name: stg_csv__all_game_log
+    columns:
+      - name: game_id
+        tests:
+          - not_null
+      - name: sk
+        tests:
+          - not_null
+          - unique

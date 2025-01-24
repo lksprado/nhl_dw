@@ -3,7 +3,7 @@ with source as (
 ),
 renamed as (
     select
-    CASE WHEN LOWER("playerId") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("playerId" AS float)) AS int) END AS player_id,
+    cast("playerId" AS int) AS player_id,
     "lastName" AS last_name,
     "goalieFullName" AS full_name,
     cast("assists" AS int) AS assists,
@@ -24,7 +24,16 @@ renamed as (
     CASE WHEN LOWER("ties") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("ties" AS float)) AS int) END AS ties,
     CASE WHEN LOWER("timeOnIce") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("timeOnIce" AS float)) AS int) END AS time_on_ice,
     CASE WHEN LOWER("total") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("total" AS float)) AS int) END AS total,
-	CASE WHEN LOWER("wins") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("wins" AS float)) AS int) END AS wins
+	CASE WHEN LOWER("wins") = 'nan' THEN NULL ELSE CAST(ROUND(CAST("wins" AS float)) AS int) END AS wins,
+    concat("playerId","seasonId") as pk
     from source
+),
+dup as (
+    {{ dbt_utils.deduplicate(
+        relation='renamed',
+        partition_by='pk',
+        order_by= 'season_id'
+        )
+    }}
 )
-select * from renamed
+select * from dup

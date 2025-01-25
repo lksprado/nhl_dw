@@ -106,6 +106,14 @@ def get_teams():
     save_json("teams", data, OUTPUT_DIR)
 
 
+def get_game_info():
+    URL = "https://api.nhle.com/stats/rest/en/game"
+    OUTPUT_DIR = "data/json_data/single"
+
+    data, _ = make_request(URL)
+    save_json("game_info", data, OUTPUT_DIR)
+
+
 ######## FOLDER #############################################################################
 ###########################################S##################################################
 #############################################################################################
@@ -625,4 +633,5 @@ def get_play_by_play():
 
 
 if __name__ == "__main__":
-    get_play_by_play()
+    # get_play_by_play()
+    get_game_info()

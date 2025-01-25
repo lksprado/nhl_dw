@@ -43,6 +43,12 @@ def raw_teams():
     parsing_json_pandas(input_file, "data", output)
 
 
+def raw_game_info():
+    output = "data/csv_data/raw/single"
+    input_file = "data/json_data/single/raw_game_info.json"
+    parsing_json_pandas(input_file, "data", output)
+
+
 ######## FOLDERS ##############################################################################################
 
 
@@ -149,6 +155,7 @@ if __name__ == "__main__":
     # raw_all_games_info()
     # raw_seasons()
     # raw_teams()
+    raw_game_info()
 
     ## FOLDER ###############
     # raw_goalie_stats()
@@ -162,5 +169,5 @@ if __name__ == "__main__":
     # raw_game_log()
     # raw_player_info()
     # process_file('teste/raw_2024020748.json')
-    raw_play_by_play()
+    # raw_play_by_play()
 # pass

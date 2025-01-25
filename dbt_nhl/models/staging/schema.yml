@@ -21,6 +21,8 @@ sources:
       description: "Player information per team each season"
     - name: raw_all_club_stats
       description: "All stats from skaters across all seasons per team"
+    - name: raw_play_by_play
+      description: "All plays during a game"
 ####################################################################################################################
 
 models:

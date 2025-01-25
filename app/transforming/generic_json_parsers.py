@@ -1,7 +1,6 @@
 import os
-import sys
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 import json
 
 import pandas as pd
@@ -110,6 +109,25 @@ def parsing_json_pandas_3(filename: str, output_dir: str):
         data = json.load(f)
         data = data[0]
         df = pd.json_normalize(data)
+    df.to_csv(file_path + ".csv", index=False)
+    print("Done")
+
+
+@track_time
+def parsing_json_pandas_4(filename: str, output_dir: str):
+    file = os.path.basename(filename)
+    file = os.path.splitext(file)[0]
+    file_path = os.path.join(output_dir, file)
+
+    with open(filename) as f:
+        data = json.load(f)
+        # data = data[0]
+        df = pd.json_normalize(data, meta=["plays"], record_path="plays")
+        df = df.drop(columns=["plays"])
+        if "details" in df.columns:
+            details_df = pd.json_normalize(df["details"])
+            df = pd.concat([df.drop(columns=["details"]), details_df], axis=1)
+    df["filename"] = file
     df.to_csv(file_path + ".csv", index=False)
     print("Done")
 

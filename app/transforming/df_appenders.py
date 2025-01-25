@@ -84,14 +84,23 @@ def processed_team_season():
     df_appender_folder(output_file_name, input_csv_dir, output_dir)
 
 
+@track_time
+def processed_play_by_play():
+    output_file_name = "play_by_play"
+    input_csv_dir = "data/csv_data/raw/raw_play_by_play"
+    output_dir = "data/csv_data/processed"
+    df_appender_folder(output_file_name, input_csv_dir, output_dir)
+
+
 if __name__ == "__main__":
     # processed_all_goalies_stats()
     # processed_all_skaters_stats()
     # processed_all_team_stats()
     # processed_club_stats()
-    processed_game_log()
+    # processed_game_log()
     # processed_player_info()
     # processed_stats_goalies()
     # processed_stats_skaters()
     # processed_team_season()
+    processed_play_by_play()
     # pass

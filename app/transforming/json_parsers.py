@@ -1,14 +1,14 @@
-import os
-import sys
+from multiprocessing import Pool, cpu_count
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
+# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+from utils.time_tracker import track_time
 import glob
 
 from app.transforming.generic_json_parsers import (
     parsing_json_pandas,
     parsing_json_pandas_2,
     parsing_json_pandas_3,
+    parsing_json_pandas_4,
 )
 
 
@@ -123,6 +123,25 @@ def raw_player_info():
             continue
 
 
+def process_file(input_file):
+    try:
+        # Chama a função de conversão diretamente
+        parsing_json_pandas_4(input_file, "data/csv_data/raw/raw_play_by_play")
+        print(f"Processado: {input_file}")
+    except Exception as e:
+        print(f"Erro ao processar {input_file}: {e}")
+
+
+@track_time
+def raw_play_by_play():
+    pattern = "data/json_data/raw_play_by_play/raw_*.json"
+    input_files = glob.glob(pattern)
+
+    # Multiprocessing para processar vários arquivos em paralelo
+    with Pool(cpu_count()) as pool:
+        pool.map(process_file, input_files)
+
+
 if __name__ == "__main__":
     ## SINGLE ###############
     # raw_current_standings()
@@ -140,6 +159,8 @@ if __name__ == "__main__":
     # raw_all_skater_stats()
     # raw_all_goalie_stats()
     # raw_all_team_stats()
-    raw_game_log()
-# raw_player_info()
+    # raw_game_log()
+    # raw_player_info()
+    # process_file('teste/raw_2024020748.json')
+    raw_play_by_play()
 # pass

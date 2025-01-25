@@ -27,7 +27,7 @@ class DataLoader:
         print("Done")
 
     @track_time
-    def load_csv_to_single(self, file_path):
+    def load_csv_to_single_polars(self, file_path):
         file = os.path.basename(file_path)
         table_name = fn + os.path.splitext(file)[0]
         with tqdm(
@@ -46,9 +46,16 @@ class DataLoader:
         self.db.save_dataframe_polars(df, table_name)
         print("Done")
 
+    def load_csv_to_single_pandas(self, file_path):
+        file = os.path.basename(file_path)
+        table_name = fn + os.path.splitext(file)[0]
+        df = pd.read_csv(file_path, dtype=str)  # Specify dtype as str
+        self.db.save_dataframe(df, table_name)
+        print("Done")
+
 
 if __name__ == "__main__":
     dl = DataLoader()
     # dl.load_csv_to_db('data/csv_data/processed')
 
-    dl.load_csv_to_single("data/csv_data/processed/play_by_play.csv")
+    dl.load_csv_to_single_pandas("data/csv_data/processed/game_info.csv")

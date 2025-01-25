@@ -23,6 +23,9 @@ sources:
       description: "All stats from skaters across all seasons per team"
     - name: raw_play_by_play
       description: "All plays during a game"
+    - name: raw_game_info
+      description: "All games summary info - FACT"
+
 ####################################################################################################################
 
 models:

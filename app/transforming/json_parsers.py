@@ -9,6 +9,7 @@ from app.transforming.generic_json_parsers import (
     parsing_json_pandas_2,
     parsing_json_pandas_3,
     parsing_json_pandas_4,
+    parsing_json_pandas_5,
 )
 
 
@@ -43,10 +44,11 @@ def raw_teams():
     parsing_json_pandas(input_file, "data", output)
 
 
+@track_time
 def raw_game_info():
     output = "data/csv_data/raw/single"
     input_file = "data/json_data/single/raw_game_info.json"
-    parsing_json_pandas(input_file, "data", output)
+    parsing_json_pandas_5(input_file, output)
 
 
 ######## FOLDERS ##############################################################################################

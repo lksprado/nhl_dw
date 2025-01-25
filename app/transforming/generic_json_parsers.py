@@ -133,6 +133,18 @@ def parsing_json_pandas_4(filename: str, output_dir: str):
 
 
 @track_time
+def parsing_json_pandas_5(input_file, output_path):
+    file = os.path.basename(input_file)
+    file = os.path.splitext(file)[0]
+    file_path = os.path.join(output_path, file)
+
+    with open(input_file) as f:
+        data = json.load(f)
+        df = pd.json_normalize(data["data"])
+    df.to_csv(file_path + ".csv", index=False)
+
+
+@track_time
 def parsing_json_polars(filename: str, ls: str, output_dir: str):
     """
     Parses json and saves as csv using Polars lib

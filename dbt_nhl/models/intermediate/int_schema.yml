@@ -1,0 +1,9 @@
+models:
+  - name: int_dime_teams
+    description: "Combines information on the NHL teams and their current status"
+  - name: int_dime_player
+    description: "Player characterists"
+  - name: "int_dime_player_current_stats"
+    description: "Player Current Stats"
+  - name: "int_fct_game_info"
+    descripition: "All games results"

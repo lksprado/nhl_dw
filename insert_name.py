@@ -1,7 +1,9 @@
-import pandas as pd
 import os
-from utils.time_tracker import track_time
 from multiprocessing import Pool, cpu_count
+
+import pandas as pd
+
+from utils.time_tracker import track_time
 
 
 def process_file(file_path, output_folder):

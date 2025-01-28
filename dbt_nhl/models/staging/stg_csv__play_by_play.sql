@@ -3,7 +3,7 @@ with source as (
   ),
   renamed as (
       select
-          {{ string_to_int("eventid") }},
+        {{ string_to_int("eventid") }} as event_id,
         "timeinperiod",
         make_time(0, substring(timeinperiod from 1 for 2)::integer, substring(timeinperiod from 4 for 2)::integer)::time AS time_in_period_time,
         make_time(0, substring(timeremaining from 1 for 2)::integer, substring(timeremaining from 4 for 2)::integer)::time AS time_remaining,

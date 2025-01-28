@@ -24,8 +24,11 @@ models:
       +materialized: view
       +schema: nhl_raw
     intermediate:
-      +materialized: table
+      +materialized: view
       +schema: nhl_intermediate
     marts:
       +materialized: table
       +schema: nhl_marts
+
+seeds:
+  schema: nhl_raw

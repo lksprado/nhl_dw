@@ -2,10 +2,10 @@ import os
 
 # import pandas as pd
 import polars as pl
-from sqlalchemy import create_engine, text, Table, MetaData, Column, String
-from src.logger import logger
-
 from dotenv import load_dotenv
+from sqlalchemy import Column, MetaData, String, Table, create_engine, text
+
+from src.logger import logger
 
 load_dotenv()
 

@@ -21,7 +21,7 @@ renamed as (
     "birthStateProvince.default" as birth_state,
     "shootsCatches" as shoots_or_catches,
     "inTop100AllTime"::bool as in_top100_alltime,
-    "inHHOF":: bool as in_hall_of_game,
+    "inHHOF":: bool as in_hall_of_fame,
     {{ string_to_int('"featuredStats.season"') }} as latest_season,
     "currentTeamAbbrev" as current_team_id,
     {{ string_to_int('"draftDetails.overallPick"') }} as  draft_overall_pick,

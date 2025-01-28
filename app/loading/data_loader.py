@@ -3,11 +3,12 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from app.loading.generic_data_loader import PostgresClient
 import pandas as pd
 import polars as pl
-from utils.time_tracker import track_time
 from tqdm import tqdm
+
+from app.loading.generic_data_loader import PostgresClient
+from utils.time_tracker import track_time
 
 fn = "raw_"
 
@@ -58,4 +59,4 @@ if __name__ == "__main__":
     dl = DataLoader()
     # dl.load_csv_to_db('data/csv_data/processed')
 
-    dl.load_csv_to_single_pandas("data/csv_data/processed/game_info.csv")
+    dl.load_csv_to_single_pandas("data/csv_data/processed/teams.csv")

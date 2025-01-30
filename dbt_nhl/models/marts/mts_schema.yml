@@ -1,0 +1,3 @@
+models:
+  - name: 'mts_obt_game_results'
+    description: "Complete game results and identifications"

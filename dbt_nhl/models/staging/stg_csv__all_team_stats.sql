@@ -29,4 +29,5 @@ renames as (
     CASE WHEN LOWER("faceoffWinPct") = 'nan' THEN NULL ELSE CAST("faceoffWinPct" AS float) END AS faceoff_win_pctg
 FROM source
 )
-select * from renames
+select
+{{ dbt_utils.generate_surrogate_key(['team_id','season_id']) }} as sk, * from renames

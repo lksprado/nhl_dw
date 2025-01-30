@@ -29,9 +29,9 @@ player_info as (
     t2.full_name as draft_team_name,
     pic_url
     from {{ ref('stg_csv__player_info') }} pi
-    left join {{ ref('int_dime_teams') }} t
+    left join {{ ref('stg_csv__teams') }} t
     on pi.current_team_id = t.team_id
-    left join {{ ref('int_dime_teams') }} t2
+    left join {{ ref('stg_csv__teams') }} t2
     on pi.draft_team_id = t2.team_id
 ),
 player_seasons as (
@@ -48,12 +48,15 @@ player_seasons as (
     rank() over (partition by player_id order by season_id) as seasons_played,
     position_code
     from {{ ref('stg_csv__all_goalies_stats')}}
+),
+final as (
+    select
+    pi.*,
+    ps.seasons_played
+    from player_info pi
+    left join player_seasons ps
+    on pi.player_id = ps.player_id
+    and pi.latest_season = ps.season_id
+    and pi.position = ps.position_code
 )
-select
-pi.*,
-ps.seasons_played
-from player_info pi
-left join player_seasons ps
-on pi.player_id = ps.player_id
-and pi.latest_season = ps.season_id
-and pi.position = ps.position_code
+select {{ dbt_utils.generate_surrogate_key(['player_id','full_name']) }} as sk,* from final

@@ -10,10 +10,10 @@ with source as (
         {{ string_to_int("hometeam_id") }} as home_team_code,
         "hometeam_abbrev"::text as home_team_id,
         concat("hometeam_placename_default",' ',"hometeam_commonname_default") as home_team_full_name,
-        {{ string_to_int("hometeam_sog") }} as home_team_sog,
-        {{ string_to_int("awayteam_sog") }} as away_team_sog,
-        {{ string_to_int("hometeam_score") }} as home_team_score,
-        {{ string_to_int("awayteam_score") }} as away_team_score
+        {{ string_to_int("hometeam_sog") }} as home_sog,
+        {{ string_to_int("awayteam_sog") }} as away_sog,
+        {{ string_to_int("hometeam_score") }} as home_score,
+        {{ string_to_int("awayteam_score") }} as away_score
       from source
   ),
 dup as (

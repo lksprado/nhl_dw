@@ -5,7 +5,7 @@ renamed as (
     select
     concat("playerId","seasonId") as pk,
     cast("playerId" AS int) AS player_id,
-    CAST("seasonId" AS int) AS season_id,
+    cast("seasonId" AS int) AS season_id,
     "goalieFullName" AS full_name,
     "lastName" AS last_name,
     "shootsCatches" AS shoots_or_catches,
@@ -36,4 +36,5 @@ dup as (
         )
     }}
 )
-select * from dup
+
+SELECT * FROM DUP

@@ -16,8 +16,8 @@ gamelog_teams as (
 ),
 final as (
     select
-    t1.team_id,
     t1.team_code,
+    t1.team_id,
     t1.full_name,
     t3.player_team_common_name as common_name,
     t2.first_season,

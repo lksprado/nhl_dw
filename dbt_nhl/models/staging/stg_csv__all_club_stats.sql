@@ -12,7 +12,7 @@ with source as (
         WHEN {{ string_to_int('"gameType"') }} = 1 THEN 'pre_season'
         WHEN {{ string_to_int('"gameType"') }} = 2 THEN 'regular_season'
         WHEN {{ string_to_int('"gameType"') }} = 3 THEN 'post_season'
-    END as season_type,
+    END as game_type,
     {{ string_to_int('"gameWinningGoals"') }} as game_winning_goals,
     {{ string_to_int('"gamesPlayed"') }} as games_played ,
     {{ string_to_int('"gamesStarted"') }} as games_started,

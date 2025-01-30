@@ -2,7 +2,7 @@
 templater = dbt
 dialect = postgres
 runaway_limit = 10
-max_line_length = 80
+max_line_length = 120
 indent_unit = space
 
 [sqlfluff:templater:dbt]
@@ -28,7 +28,7 @@ aliasing = explicit
 allow_scalar = False
 
 [sqlfluff:rules:capitalisation.identifiers]
-extended_capitalisation_policy = upper
+extended_capitalisation_policy = lower
 
 [sqlfluff:rules:capitalisation.functions]
 capitalisation_policy = upper

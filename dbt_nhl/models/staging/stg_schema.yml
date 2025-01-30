@@ -29,7 +29,8 @@ sources:
       description: "Team identifications"
     - name: parameters_team_season
       description: "All seasons each franchise ever been"
-
+    - name: raw_game_details
+      description: "Details and stats for all games"
 ####################################################################################################################
 
 models:
@@ -98,6 +99,7 @@ models:
         description: "Unique identifier for player"
         tests:
           - not_null
+
   - name: stg_csv__game_info
     description: "Contain games results"
     columns:
@@ -106,9 +108,15 @@ models:
         tests:
           - not_null
           - unique
+
   - name: stg_csv__teams
     description: "Contains teams identifications"
+
   - name: stg_csv__parameters_teams_seasons
     description: "Contains team first and latest season"
+
   - name: stg_csv__game_info_sog
     description: "Contains summarized data from play by play"
+
+  - name: stg_csv__game_details
+    description: "More stats and details for each game"

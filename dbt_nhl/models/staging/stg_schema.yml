@@ -51,6 +51,9 @@ models:
       - name: team_name
         tests:
           - not_null
+      - name: sk
+        tests:
+          - not_null
 
   - name: stg_csv__all_skaters_stats
     description: "Contains all stats for each season - SDC"

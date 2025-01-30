@@ -1,3 +1,11 @@
 models:
   - name: 'mts_obt_game_results'
     description: "Complete game results and identifications"
+    columns:
+      - name: 'game_id'
+        tests:
+          - unique
+          - not_null
+      - name: 'home_sog'
+        tests:
+          - not_null

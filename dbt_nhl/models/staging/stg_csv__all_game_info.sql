@@ -23,7 +23,7 @@ renamed AS (
         {{ string_to_int('"gameStateId"') }} AS game_state_id,
         {{ string_to_int('"period"') }} AS number_of_periods,
         {{ string_to_int('"homeTeamId"') }} AS home_team_id,
-        {{ string_to_int('"visitingTeamId"') }} AS visiting_team_id,
+        {{ string_to_int('"visitingTeamId"') }} AS away_team_id,
         {{ string_to_int('"homeScore"') }} AS home_score,
         {{ string_to_int('"visitingScore"') }} AS away_score
     FROM source

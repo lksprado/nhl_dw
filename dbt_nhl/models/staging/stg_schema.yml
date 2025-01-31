@@ -51,7 +51,7 @@ models:
       - name: team_name
         tests:
           - not_null
-      - name: sk
+      - name: sk_teamid_seasonid
         tests:
           - not_null
 

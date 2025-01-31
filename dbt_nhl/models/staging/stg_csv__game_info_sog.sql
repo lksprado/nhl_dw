@@ -23,5 +23,17 @@ dup as (
         order_by= 'game_id'
         )
     }}
+),
+final as (
+  select
+  concat(((left(game_id::text,4)::int -1)::text),left(game_id::text,4)::int)::int as season_id,
+  *
+  from dup
 )
-select * from dup order by game_id desc
+select
+*,
+{{dbt_utils.generate_surrogate_key(['away_team_code','game_id']) }} as sk_away_teamid_gameid,
+{{dbt_utils.generate_surrogate_key(['home_team_code','game_id']) }} as sk_home_teamid_gameid,
+{{dbt_utils.generate_surrogate_key(['away_team_code','season_id']) }} as sk_away_teamid_seasonid,
+{{dbt_utils.generate_surrogate_key(['home_team_code','season_id']) }} as sk_home_teamid_seasonid
+from final

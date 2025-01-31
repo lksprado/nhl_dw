@@ -10,3 +10,4 @@ No entanto, no universo da engenharia é sempre preciso lidar com situações in
  - Testes unitários pelo menos para checar o output;
  - A primeira carga de dados é sempre mais volumosa e requer utilizar os métodos corretos como COPY ao invés de INSERT;
  - Modelagem requer uma atenção especial e o dbt é essencial para manter uma documentação mínima e funcional para que os modelos sejam significativos
+ - Após a primeira carga como estabilizar e concatenar dados incompletos e atualizados

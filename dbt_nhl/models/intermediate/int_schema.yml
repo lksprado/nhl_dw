@@ -7,3 +7,5 @@ models:
     description: "Player Current Stats"
   - name: "int_fct_game_info"
     descripition: "All games results"
+  - name: "int_fct_team_stats"
+    description: "All team stats"

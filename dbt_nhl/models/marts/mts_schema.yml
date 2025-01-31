@@ -1,6 +1,6 @@
 models:
   - name: 'mts_obt_game_results'
-    description: "Complete game results and identifications"
+    description: "Complete game results and identifications - INCREMENTAL"
     columns:
       - name: 'game_id'
         tests:
@@ -9,3 +9,5 @@ models:
       - name: 'home_sog'
         tests:
           - not_null
+  - name: 'mts_obt_team_results'
+    description: "Complete team stats - SDC 1 + SDC 2"

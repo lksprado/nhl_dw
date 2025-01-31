@@ -30,4 +30,4 @@ renames as (
 FROM source
 )
 select
-{{ dbt_utils.generate_surrogate_key(['team_id','season_id']) }} as sk, * from renames
+{{ dbt_utils.generate_surrogate_key(['team_id','season_id']) }} as sk_teamid_seasonid, * from renames

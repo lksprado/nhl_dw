@@ -10,15 +10,6 @@ from utils.time_tracker import track_time
 
 @track_time
 def parsing_json_pandas(filename: str, ls, output_dir: str):
-    """
-    Parses json and saves as csv using Pandas lib \n
-    filename:
-        Provide the json file
-    ls:
-        Provide desired json list element
-    output_dir:
-        Provide output folder for csv file
-    """
     csv_filename = os.path.basename(filename)
     csv_filename = csv_filename.replace(".json", ".csv")
     data = pd.read_json(filename)
@@ -362,3 +353,74 @@ def parsing_json_polars(filename: str, ls: str, output_dir: str):
     df_unnested = unnest_all(df)
     df_unnested.columns = [col.replace(f"{ls}.", "") for col in df_unnested.columns]
     df_unnested.write_csv(f"{output_dir}/{csv_filename}")
+
+
+def parsing_json_pandas_7(filename: str, output_dir: str):
+    csv_filename = os.path.basename(filename)
+    csv_filename = csv_filename.replace(".json", ".csv")
+
+    with open(filename) as f:
+        data = json.load(f)
+
+    # Use record_path as a list of paths
+    record_paths = [
+        ["playerByGameStats", "awayTeam", "forwards"],
+        ["playerByGameStats", "awayTeam", "defense"],
+        ["playerByGameStats", "awayTeam", "goalies"],
+        ["playerByGameStats", "homeTeam", "forwards"],
+        ["playerByGameStats", "homeTeam", "defense"],
+        ["playerByGameStats", "homeTeam", "goalies"],
+    ]
+
+    # Combine results from all paths
+    parsed_data = pd.concat(
+        [pd.json_normalize(data, record_path=path) for path in record_paths],
+        ignore_index=True,
+    )
+
+    # Drop unnecessary columns
+    columns_to_drop = ["name.cs", "name.fi", "name.sk", "name.sv"]
+    parsed_data = parsed_data.drop(
+        columns=[col for col in columns_to_drop if col in parsed_data.columns],
+        errors="ignore",
+    )
+    parsed_data["filename"] = csv_filename
+    parsed_data.to_csv(f"{output_dir}/{csv_filename}", index=False)
+
+
+def parsing_json_pandas_8(filename: str, output_dir: str):
+    pd.set_option("display.max_columns", None)
+    pd.set_option("display.max_rows", 3)
+
+    csv_filename = os.path.basename(filename)
+    csv_filename = csv_filename.replace(".json", ".csv")
+
+    with open(filename) as f:
+        data = json.load(f)
+
+    parsed_data = pd.json_normalize(data)
+
+    # Drop unnecessary columns
+    columns_to_drop = [
+        "tvBroadcasts",
+        "awayTeam.logo",
+        "awayTeam.darkLogo",
+        "awayTeam.placeNameWithPreposition.fr",
+        "homeTeam.commonName.fr",
+        "homeTeam.logo",
+        "homeTeam.darkLogo",
+        "homeTeam.placeNameWithPreposition.fr",
+        "playerByGameStats.awayTeam.forwards",
+        "playerByGameStats.awayTeam.forwards",
+        "playerByGameStats.awayTeam.defense",
+        "playerByGameStats.awayTeam.goalies",
+        "playerByGameStats.homeTeam.forwards",
+        "playerByGameStats.homeTeam.defense",
+        "playerByGameStats.homeTeam.goalies",
+    ]
+    parsed_data = parsed_data.drop(
+        columns=[col for col in columns_to_drop if col in parsed_data.columns],
+        errors="ignore",
+    )
+    parsed_data["filename"] = csv_filename
+    parsed_data.to_csv(f"{output_dir}/{csv_filename}", index=False)

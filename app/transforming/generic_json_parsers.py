@@ -389,9 +389,6 @@ def parsing_json_pandas_7(filename: str, output_dir: str):
 
 
 def parsing_json_pandas_8(filename: str, output_dir: str):
-    pd.set_option("display.max_columns", None)
-    pd.set_option("display.max_rows", 3)
-
     csv_filename = os.path.basename(filename)
     csv_filename = csv_filename.replace(".json", ".csv")
 
@@ -406,6 +403,7 @@ def parsing_json_pandas_8(filename: str, output_dir: str):
         "awayTeam.logo",
         "awayTeam.darkLogo",
         "awayTeam.placeNameWithPreposition.fr",
+        "homeTeam.placeNameWithPreposition.fr",
         "homeTeam.commonName.fr",
         "homeTeam.logo",
         "homeTeam.darkLogo",
@@ -417,6 +415,23 @@ def parsing_json_pandas_8(filename: str, output_dir: str):
         "playerByGameStats.homeTeam.forwards",
         "playerByGameStats.homeTeam.defense",
         "playerByGameStats.homeTeam.goalies",
+        "awayteam_placename_fr",
+        "venuelocation_fr",
+        "gameoutcome_tie",
+        "awayteam_commonname_fr",
+        "specialevent_parentid",
+        "specialevent_name_default",
+        "specialevent_name_fr",
+        "perioddescriptor_otperiods",
+        "venuelocation_cs",
+        "venuelocation_de",
+        "venuelocation_fi",
+        "venuelocation_sk",
+        "venuelocation_sv",
+        "specialevent_lightlogourl_default",
+        "specialevent_lightlogourl_fr",
+        "specialevent_name_sk",
+        "specialevent_name_sv",
     ]
     parsed_data = parsed_data.drop(
         columns=[col for col in columns_to_drop if col in parsed_data.columns],

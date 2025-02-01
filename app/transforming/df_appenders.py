@@ -100,6 +100,22 @@ def processed_game_details():
     df_appender_folder(output_file_name, input_csv_dir, output_dir)
 
 
+@track_time
+def processed_game_boxscore_game():
+    output_file_name = "boxscore_games"
+    input_csv_dir = "data/csv_data/raw/raw_boxscore_game"
+    output_dir = "data/csv_data/processed"
+    df_appender_folder(output_file_name, input_csv_dir, output_dir)
+
+
+@track_time
+def processed_game_boxscore_players():
+    output_file_name = "boxscore_players"
+    input_csv_dir = "data/csv_data/raw/raw_boxscore_players"
+    output_dir = "data/csv_data/processed"
+    df_appender_folder(output_file_name, input_csv_dir, output_dir)
+
+
 if __name__ == "__main__":
     # processed_all_goalies_stats()
     # processed_all_skaters_stats()
@@ -110,6 +126,8 @@ if __name__ == "__main__":
     # processed_stats_goalies()
     # processed_stats_skaters()
     # processed_team_season()
-    # processed_play_by_play()
-    processed_game_details()
-    # pass
+    processed_play_by_play()
+    # processed_game_details()
+    # processed_game_boxscore_game()
+    # processed_game_boxscore_players()
+    pass

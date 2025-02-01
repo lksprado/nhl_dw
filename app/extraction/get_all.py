@@ -600,7 +600,7 @@ def get_play_by_play():
     URL = "https://api-web.nhle.com/v1/gamecenter/{game_id}/play-by-play"
     OUTPUT_DIR = "data/json_data/raw_play_by_play"
 
-    parameters_input = "data/csv_data/processed/parameters_gameid.csv"
+    parameters_input = "app/all_games_till_2025-01-29.csv"
     df_parameter = pd.read_csv(parameters_input)
     df_parameter = df_parameter.sort_values(by=["game_id"], ascending=False)
 
@@ -735,7 +735,7 @@ def get_game_boxcore():
 
 
 if __name__ == "__main__":
-    # get_play_by_play()
+    get_play_by_play()
     # get_game_info()
     # get_game_details()
-    get_game_boxcore()
+    # get_game_boxcore()

@@ -62,7 +62,7 @@ def load_db():
     con.close()
 
 
-def copy_dataframe_to_postgres():
+def copy_dataframe_to_postgres(file, table):
     # Configuração do banco de dados PostgreSQL
     db_config = {
         "dbname": os.getenv("PG_DATABASE"),
@@ -72,9 +72,9 @@ def copy_dataframe_to_postgres():
         "port": os.getenv("PG_PORT"),
     }
 
-    csv_file = "data/csv_data/processed/play_by_play.csv"
+    csv_file = file
     schema_name = "nhl_raw"
-    table_name = "raw_play_by_play_2"
+    table_name = table
 
     # Conectar ao DuckDB e ler o CSV
     con = duckdb.connect()
@@ -114,4 +114,6 @@ def copy_dataframe_to_postgres():
 
 if __name__ == "__main__":
     # load_db()
-    copy_dataframe_to_postgres()
+    copy_dataframe_to_postgres(
+        "data/csv_data/processed/play_by_play.csv", "raw_play_by_play"
+    )

@@ -1,6 +1,6 @@
 import glob
 from multiprocessing import Pool, cpu_count
-
+import os
 from app.transforming.generic_json_parsers import (
     parsing_json_pandas,
     parsing_json_pandas_2,
@@ -8,6 +8,8 @@ from app.transforming.generic_json_parsers import (
     parsing_json_pandas_4,
     parsing_json_pandas_5,
     parsing_json_pandas_6,
+    parsing_json_pandas_7,
+    parsing_json_pandas_8,
 )
 
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -133,11 +135,23 @@ def raw_player_info():
 
 
 def process_file(input_file):
-    try:
-        # Chama a função de conversão diretamente
-        parsing_json_pandas_4(input_file, "data/csv_data/raw/raw_play_by_play")
-    except Exception as e:
-        print(f"Erro ao processar {input_file}: {e}")
+    # try:
+    #     # Chama a função de conversão diretamente
+    #     parsing_json_pandas_4(input_file, "data/csv_data/raw/raw_play_by_play")
+    # except Exception as e:
+    #     print(f"Erro ao processar {input_file}: {e}")
+    # Extrair o nome base do arquivo JSON para verificar o CSV correspondente
+    base_name = os.path.splitext(os.path.basename(input_file))[0]
+    csv_file = f"data/csv_data/raw/raw_play_by_play/{base_name}.csv"
+
+    if not os.path.exists(csv_file):
+        try:
+            # Chama a função de conversão diretamente, assumindo que `parsing_json_pandas_4` está definida
+            parsing_json_pandas_4(input_file, "data/csv_data/raw/raw_play_by_play")
+        except Exception as e:
+            print(f"Erro ao processar {input_file}: {e}")
+    else:
+        print(f"Arquivo {input_file} já foi processado, pulando...")
 
 
 @track_time
@@ -168,6 +182,42 @@ def raw_game_details():
         pool.map(process_file_game_details, input_files)
 
 
+def process_file_game_boxscore_players(input_file):
+    try:
+        # Chama a função de conversão diretamente
+        parsing_json_pandas_7(input_file, "data/csv_data/raw/raw_boxcore_players")
+    except Exception as e:
+        print(f"Erro ao processar {input_file}: {e}")
+
+
+@track_time
+def raw_game_boxscore_players():
+    pattern = "data/json_data/raw_boxscore/raw_*_details.json"
+    input_files = glob.glob(pattern)
+
+    # Multiprocessing para processar vários arquivos em paralelo
+    with Pool(cpu_count()) as pool:
+        pool.map(process_file_game_boxscore_players, input_files)
+
+
+def process_file_game_boxscore_game(input_file):
+    try:
+        # Chama a função de conversão diretamente
+        parsing_json_pandas_8(input_file, "data/csv_data/raw/raw_boxscore_game")
+    except Exception as e:
+        print(f"Erro ao processar {input_file}: {e}")
+
+
+@track_time
+def raw_game_boxscore_game():
+    pattern = "data/json_data/raw_boxscore/raw_*_details.json"
+    input_files = glob.glob(pattern)
+
+    # Multiprocessing para processar vários arquivos em paralelo
+    with Pool(cpu_count()) as pool:
+        pool.map(process_file_game_boxscore_game, input_files)
+
+
 if __name__ == "__main__":
     ## SINGLE ###############
     # raw_current_standings()
@@ -189,6 +239,9 @@ if __name__ == "__main__":
     # raw_game_log()
     # raw_player_info()
     # process_file('teste/raw_2024020748.json')
-    # raw_play_by_play()
-    raw_game_details()
+    raw_play_by_play()
+    # raw_game_details()
+    # raw_game_boxscore_players()
+    # raw_game_boxscore_game()
+
     pass

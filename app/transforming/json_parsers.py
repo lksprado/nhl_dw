@@ -165,11 +165,22 @@ def raw_play_by_play():
 
 
 def process_file_game_details(input_file):
-    try:
-        # Chama a função de conversão diretamente
-        parsing_json_pandas_6(input_file, "data/csv_data/raw/raw_game_details")
-    except Exception as e:
-        print(f"Erro ao processar {input_file}: {e}")
+    # try:
+    #     # Chama a função de conversão diretamente
+    #     parsing_json_pandas_6(input_file, "data/csv_data/raw/raw_game_details")
+    # except Exception as e:
+    #     print(f"Erro ao processar {input_file}: {e}")
+    base_name = os.path.splitext(os.path.basename(input_file))[0]
+    csv_file = f"data/csv_data/raw/raw_game_details/{base_name}.csv"
+
+    if not os.path.exists(csv_file):
+        try:
+            # Chama a função de conversão diretamente, assumindo que `parsing_json_pandas_4` está definida
+            parsing_json_pandas_6(input_file, "data/csv_data/raw/raw_game_details")
+        except Exception as e:
+            print(f"Erro ao processar {input_file}: {e}")
+    else:
+        print(f"Arquivo {input_file} já foi processado, pulando...")
 
 
 @track_time
@@ -239,8 +250,8 @@ if __name__ == "__main__":
     # raw_game_log()
     # raw_player_info()
     # process_file('teste/raw_2024020748.json')
-    raw_play_by_play()
-    # raw_game_details()
+    # raw_play_by_play()
+    raw_game_details()
     # raw_game_boxscore_players()
     # raw_game_boxscore_game()
 

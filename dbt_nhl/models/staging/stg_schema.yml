@@ -129,5 +129,10 @@ models:
     description: "More stats and details for each game"
   - name: stg_csv__all_boxscore_games
     description: "Game results and info"
-  - name: stg-csv_all_boxscore_players
+  - name: stg_csv_all_boxscore_players
     description: "Player results for game"
+    columns:
+      - name: player_id
+        tests:
+          - unique
+          - not null

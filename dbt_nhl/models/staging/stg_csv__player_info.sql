@@ -6,6 +6,7 @@ renamed as (
     {{ string_to_int('"playerId"') }} as player_id,
     "firstName.default" as first_name,
     "lastName.default" as last_name,
+    concat("firstName.default",' ',"lastName.default") as full_name,
     "isActive":: bool as is_active,
     {{ string_to_int('"sweaterNumber"') }}  as jersey_number,
     "position",

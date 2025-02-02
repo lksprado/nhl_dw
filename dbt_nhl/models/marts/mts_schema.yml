@@ -11,3 +11,5 @@ models:
           - not_null
   - name: 'mts_obt_team_results'
     description: "Complete team stats - SDC 1 + SDC 2"
+  - name: 'mts_obt_player_results'
+    description: "Complete game results and identification per player - INCREMENTAL"

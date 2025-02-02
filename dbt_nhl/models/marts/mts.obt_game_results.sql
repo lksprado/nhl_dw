@@ -1,6 +1,6 @@
 with
 games as (
-    select * from {{ ref('int_fct_game_info') }}
+    select * from {{ ref('int_fct_games') }}
 ),
 teams as (
     select * from {{ ref('int_dime_teams') }}
@@ -11,18 +11,23 @@ g.season_id,
 g.game_date,
 g.start_time_date_eastern,
 g.start_time_date_gmt_minus_3,
+g.city,
+g.arena,
+g.game_type,
+g.outcome_last_period_type,
+g.outcome_ot_periods,
 t2.full_name as home_team_name,
 t.full_name as away_team_name,
-g.game_type,
-g.game_number,
-g.number_of_periods,
+t2.team_id as home_team_id,
+t.team_id as away_team_id,
+t2.is_active as home_team_active,
+t.is_active as away_team_active,
 g.away_score,
 g.home_score,
 g.home_sog,
 g.away_sog,
 g.referee_1,
 g.referee_2,
-g.referee_3,
 g.home_score_period_1,
 g.home_score_period_2,
 g.home_score_period_3,
@@ -61,6 +66,6 @@ g.home_blocked_shots,
 g.away_blocked_shots
 from games g
 left join teams t
-on g.away_team_id = t.team_code
+on g.away_team_code = t.team_code
 left join teams t2
-on g.home_team_id = t2.team_code
+on g.home_team_code = t2.team_code

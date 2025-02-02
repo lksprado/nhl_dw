@@ -115,5 +115,5 @@ def copy_dataframe_to_postgres(file, table):
 if __name__ == "__main__":
     # load_db()
     copy_dataframe_to_postgres(
-        "data/csv_data/processed/play_by_play.csv", "raw_play_by_play"
+        "data/csv_data/processed/game_details.csv", "raw_game_details"
     )

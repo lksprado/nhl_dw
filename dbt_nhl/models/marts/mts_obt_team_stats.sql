@@ -7,7 +7,7 @@ teams as (
 )
 select
 s.season_id,
-s.team_id,
+--s.team_id,
 t.full_name,
 t.is_active,
 s.games_played,

@@ -13,11 +13,7 @@ import pandas as pd
 from app.extraction.generic_get_results import make_request, save_json
 
 
-######## FOLDER #############################################################################
-###########################################S##################################################
-#############################################################################################
-
-
+## raw_all_team_stats rats
 def get_teams_stats(season_type=2):
     """
     #### Daily Update
@@ -63,32 +59,6 @@ def get_teams_stats(season_type=2):
     #     data, _ = make_request(url)
     #     save_json(file_name=f"stats_all_teams_{season_id}",data=data, output_json_dir=OUTPUT_DIR)
 
-
-def get_current_goalie_stats_leaders():
-    """
-    #### Daily Update
-    ---
-    #### API Endpoint Documentation
-    Endpoint: /v1/goalie-stats-leaders/current
-    Method: GET
-    Description: Retrieve current goalie stats leaders.
-    Request Parameters:
-        categories (query, string) - Optional
-        limit (query, int) - Optional (Note: a limit of -1 will return all results)
-    Response: JSON format
-    """
-    URL = "https://api-web.nhle.com/v1/goalie-stats-leaders/{season_id}/2?limit=-1"
-    OUTPUT_DIR = "data/json_data/raw_goalie_stats"
-
-    parameters_input = "data/csv_data/processed/parameters.csv"
-    df_parameter = pd.read_csv(parameters_input)
-    df_parameter = df_parameter[df_parameter["api_parameter"] == "season_id"]
-
-    max_season_id = df_parameter["season_id"].max()
-    url = URL.format(season_id=max_season_id)
-    data, _ = make_request(url)
-    save_json(f"stats_goalies_{max_season_id}", data, OUTPUT_DIR)
-
     # TO GET HISTORIC DATA
     # urls = [URL.format(season_id=row.season_id) for row in df_parameter.itertuples()]
     # for url in urls:
@@ -97,39 +67,7 @@ def get_current_goalie_stats_leaders():
     #     save_json(f"stats_current_goalies_{season_id}", data, OUTPUT_DIR)
 
 
-def get_current_skater_stats_leaders():
-    """
-    #### Daily Update
-    ---
-    #### API Endpoint Documentation
-    Endpoint: /v1/skater-stats-leaders/current
-    Method: GET
-    Description: Retrieve current skater stats leaders.
-    Parameters:
-        categories (query, string) - Optional
-        limit (query, int) - Optional (Note: a limit of -1 will return all results)
-    Response: JSON format
-    """
-    URL = "https://api-web.nhle.com/v1/skater-stats-leaders/{season_id}/2?&limit=-1"
-    OUTPUT_DIR = "data/json_data/raw_skater_stats"
-
-    parameters_input = "data/csv_data/processed/parameters.csv"
-    df_parameter = pd.read_csv(parameters_input)
-    df_parameter = df_parameter[df_parameter["api_parameter"] == "season_id"]
-
-    max_season_id = df_parameter["season_id"].max()
-    url = URL.format(season_id=max_season_id)
-    data, _ = make_request(url)
-    save_json(f"stats_skaters_{max_season_id}", data, OUTPUT_DIR)
-
-    # TO GET HISTORIC DATA
-    # urls = [URL.format(season_id=row.season_id) for row in df_parameter.itertuples()]
-    # for url in urls:
-    #     season_id = url.split('/')[-2]
-    #     data = make_request(url)
-    #     save_json(f"stats_current_skaters_{season_id}", data, OUTPUT_DIR)
-
-
+## raw_roster_season
 def get_team_roster_by_season():
     """
     #### Daily Update
@@ -166,6 +104,7 @@ def get_team_roster_by_season():
         save_json(file_name, data, OUTPUT_DIR)
 
 
+## SERVE PARA CRIAR PARAMETROS CADA TEMPORADA E QUAL TIPO DE JOGO FOI JOGADO
 def get_club_stats_for_the_season_for_a_team():
     """
     #### Daily Update
@@ -192,6 +131,7 @@ def get_club_stats_for_the_season_for_a_team():
         save_json(f"team_season_{team}", data, OUTPUT_DIR)
 
 
+## NAO IMPLEMENTADO
 def get_club_stats_now(season_type=2):
     """
     #### Daily Update
@@ -235,6 +175,7 @@ def get_club_stats_now(season_type=2):
     #     print(f"Data fetched for {team_id} in season {season_id}")
 
 
+## raw_all_game_log
 def fetch_and_save_game_log(player_id, season_id, season_step, url, output_dir):
     data, _ = make_request(url)
     if data:
@@ -244,6 +185,7 @@ def fetch_and_save_game_log(player_id, season_id, season_step, url, output_dir):
         print(f"Failed --- {url}")
 
 
+## raw_all_game_log
 def get_game_log(season_type=2):
     """
     #### Daily Update
@@ -320,6 +262,7 @@ def get_game_log(season_type=2):
         print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
 
+## raw_player_info
 def fetch_and_save_player_info(player_id, url, output_dir):
     data, _ = make_request(url)
     if data:
@@ -329,6 +272,7 @@ def fetch_and_save_player_info(player_id, url, output_dir):
         print(f"Failed --- {url}")
 
 
+## raw_player_info
 def get_player_info():
     """
     #### Daily Update
@@ -390,6 +334,7 @@ def get_player_info():
         print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
 
+## raw_all_skaters_stats
 def get_skater_stats():
     """
     #### Daily Update
@@ -435,6 +380,7 @@ def get_skater_stats():
     #     save_json(f"stats_all_skaters_{season_id}", data, OUTPUT_DIR)
 
 
+## raw_all_goalies_stats
 def get_goalie_stats():
     """
     #### Daily Update
@@ -480,6 +426,7 @@ def get_goalie_stats():
     #     save_json(f"stats_all_goalies_{season_id}", data, OUTPUT_DIR)
 
 
+## raw_play_by_play
 def fetch_and_save_play_by_play(game_id, url, output_dir):
     data, _ = make_request(url)
     if data:
@@ -489,6 +436,7 @@ def fetch_and_save_play_by_play(game_id, url, output_dir):
         print(f"Failed --- {url}")
 
 
+## raw_play_by_play
 def get_play_by_play():
     """
     #### Daily Update
@@ -531,6 +479,7 @@ def get_play_by_play():
         print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
 
+## raw_game_details
 def fetch_and_save_game_details(game_id, url, output_dir):
     data, _ = make_request(url)
     if data:
@@ -540,6 +489,7 @@ def fetch_and_save_game_details(game_id, url, output_dir):
         print(f"Failed --- {url}")
 
 
+## raw_game_details
 def get_game_details():
     """
     #### Daily Update
@@ -582,6 +532,7 @@ def get_game_details():
         print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
 
+## raw_boxscore_games/raw_boxscore_players
 def fetch_and_save_boxscore(game_id, url, output_dir):
     data, _ = make_request(url)
     if data:
@@ -591,6 +542,7 @@ def fetch_and_save_boxscore(game_id, url, output_dir):
         print(f"Failed --- {url}")
 
 
+## raw_boxscore_games/raw_boxscore_players
 def get_game_boxcore():
     """
     #### Daily Update

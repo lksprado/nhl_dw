@@ -9,5 +9,7 @@ models:
     descripition: "All games results"
   - name: "int_fct_team_stats"
     description: "All team stats"
-  - name: "int_fact_player_games"
+  - name: "int_fct_player_games"
     description: "All games results per player"
+  - name: "int_fct_play_by_play"
+    description: "All plays"

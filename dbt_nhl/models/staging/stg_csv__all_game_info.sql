@@ -27,7 +27,8 @@ renamed AS (
         {{ string_to_int('"homeScore"') }} AS home_score,
         {{ string_to_int('"visitingScore"') }} AS away_score
     FROM source
-    where
-    substring(id FROM 5 FOR 2) in ('02','03') -- only regular and post seasons
+    WHERE "gameStateId" IN ('1','7')
+    AND "gameScheduleStateId" = '1'
+    AND "gameType" IN ('2','3')
 )
 SELECT * FROM renamed where game_date < current_date

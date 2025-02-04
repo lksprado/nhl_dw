@@ -2,10 +2,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import json
-
 import requests
-
 from src.logger import logger
 
 
@@ -47,10 +46,3 @@ def save_json(file_name: str, data, output_json_dir):
         logger.info(f"JSON saved at: {file_path}")
     except Exception as e:
         logger.error(f"Error on save: {e}")
-
-
-if __name__ == "__main__":
-    data, link = make_request(
-        "https://api-web.nhle.com/v1/goalie-stats-leaders/current?&limit=-1"
-    )
-    print(link.split("/")[-2])

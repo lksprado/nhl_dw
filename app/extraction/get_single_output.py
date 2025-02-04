@@ -11,6 +11,7 @@ from app.extraction.generic_get_results import make_request, save_json
 ## RAW_GAME_INFO
 def get_game_info():
     """
+    #### Daily Update
     Returns all time game id's. Update per each regular season and post season begining
     """
     URL = "https://api.nhle.com/stats/rest/en/game"
@@ -21,33 +22,33 @@ def get_game_info():
 
 
 #### OPCIONAL SE IMPLENTAR A SEASON_INFO QUE É MAIS COMPLETA
-def get_season_ids():
-    """
-    Returns a list of all seasons
-    """
-    URL = "https://api-web.nhle.com/v1/season"
-    OUTPUT_DIR = "data/json_data/single"
+# def get_season_ids():
+#     """
+#     Returns a list of all seasons
+#     """
+#     URL = "https://api-web.nhle.com/v1/season"
+#     OUTPUT_DIR = "data/json_data/single"
 
-    data, _ = make_request(URL)
-    save_json("season_ids", data, OUTPUT_DIR)
+#     data, _ = make_request(URL)
+#     save_json("season_ids", data, OUTPUT_DIR)
 
 
 #### NAO MODELADA - MAS PODE SER ÚTIL PARA CRIAR DIMENSÃO DE SEASONS
-def get_season_info():
-    """
-    Returns all seasons details like start/end dates, number of regular and post season games
-    """
-    URL = "https://api.nhle.com/stats/rest/en/season"
-    OUTPUT_DIR = "data/json_data/single"
+# def get_season_info():
+#     """
+#     Returns all seasons details like start/end dates, number of regular and post season games
+#     """
+#     URL = "https://api.nhle.com/stats/rest/en/season"
+#     OUTPUT_DIR = "data/json_data/single"
 
-    data, _ = make_request(URL)
-    save_json("season_info", data, OUTPUT_DIR)
+#     data, _ = make_request(URL)
+#     save_json("season_info", data, OUTPUT_DIR)
 
 
 ### NAO MODELADA
 def get_standings_now():
     """
-    Daily Update
+    #### Daily Update
     Returns current stats for each team
     """
     URL = "https://api-web.nhle.com/v1/standings/now"
@@ -60,15 +61,8 @@ def get_standings_now():
 # RAW_TEAMS
 def get_teams():
     """
-    #### Daily Update
-    ---
-    #### API Endpoint Documentation
-    Endpoint: /{lang}/team
-    Method: GET
-    Description: Retrieve list of all teams.
-    Parameters:
-        lang (string) - Language code
-    Response: JSON format
+    #### Yearly update \n
+    Returns teams basic information
     """
     URL = "https://api.nhle.com/stats/rest/en/team"
     OUTPUT_DIR = "data/json_data/single"

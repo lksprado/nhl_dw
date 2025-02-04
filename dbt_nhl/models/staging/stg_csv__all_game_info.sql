@@ -17,7 +17,8 @@ renamed AS (
             WHEN {{ string_to_int('"gameType"') }} = 1 THEN 'pre_season'
             WHEN {{ string_to_int('"gameType"') }} = 2 THEN 'regular_season'
             WHEN {{ string_to_int('"gameType"') }} = 3 THEN 'post_season'
-        END as game_type,
+        END as game_type_name,
+        {{ string_to_int('"gameType"') }} as game_type,
         {{ string_to_int('"gameNumber"') }} AS game_number,
         {{ string_to_int('"gameScheduleStateId"') }} AS game_schedule_state_id,
         {{ string_to_int('"gameStateId"') }} AS game_state_id,

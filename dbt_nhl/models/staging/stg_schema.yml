@@ -9,13 +9,11 @@ sources:
     tables:
     - name: raw_player_info
       description: "Player information and stats for latest season and all time career wise"
-    - name: raw_all_team_stats
-      description: "All stats from teams across all seasons"
     - name: raw_all_skaters_stats
       description: "All stats from skaters across all seasons"
     - name: raw_all_goalies_stats
       description: "All stats from goalies across all seasons"
-    - name: raw_all_game_log
+    - name: raw_game_log
       description: "Player stats for all players per game"
     - name: raw_roster_season
       description: "Player information per team each season"
@@ -45,19 +43,6 @@ models:
         tests:
           - not_null
           - unique
-
-  - name: stg_csv__all_team_stats
-    description: "Contains all stats for each season - SDC"
-    columns:
-      - name: team_id
-        tests:
-          - not_null
-      - name: team_name
-        tests:
-          - not_null
-      - name: sk_teamid_seasonid
-        tests:
-          - not_null
 
   - name: stg_csv__all_skaters_stats
     description: "Contains all stats for each season - SDC"

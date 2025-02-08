@@ -10,6 +10,7 @@ renamed as (
         when {{ string_to_int ('gametype') }} = 2 then 'regular season'
         when {{ string_to_int ('gametype') }} = 3 then 'post season'
     end as game_type,
+    {{ string_to_int ('gametype') }} as game_type_id,
     to_date(gamedate,'YYYY-MM-DD') as game_date,
     (to_timestamp(starttimeutc, 'YYYY-MM-DD"T"HH24:MI:SS'))::timestamp AS start_time_utc,
     (to_timestamp(starttimeutc, 'YYYY-MM-DD"T"HH24:MI:SS') - interval '3 hours')::timestamp AS start_time_date_gmt_minus_3,

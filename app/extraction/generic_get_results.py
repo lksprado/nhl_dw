@@ -40,7 +40,7 @@ def save_json(file_name: str, data, output_json_dir):
         Adds "raw_" to the beginning of the file name to indicate that the data is raw and has not been processed.
     """
     try:
-        file_path = os.path.join(output_json_dir, f"raw_{file_name}.json")
+        file_path = os.path.join(output_json_dir, f"{file_name}.json")
         with open(file_path, "w", encoding="utf-8") as json_file:
             json.dump(data, json_file, indent=4, ensure_ascii=False)
         logger.info(f"JSON saved at: {file_path}")

@@ -9,6 +9,7 @@ No entanto, no universo da engenharia é sempre preciso lidar com situações in
  - Extração e processamento de dados volumosos é demorado senão aplicar técnicas de paralelismo;
  - Testes unitários pelo menos para checar o output;
  - A primeira carga de dados é sempre mais volumosa e requer utilizar os métodos corretos como COPY ao invés de INSERT;
+ - Como garantir consistência nos dados evitar duplicação
  - Modelagem requer uma atenção especial e o dbt é essencial para manter uma documentação mínima e funcional para que os modelos sejam significativos
  - Após a primeira carga como estabilizar e concatenar dados incompletos e atualizados
  - Como reprocessar e recarregar um processo sem onerar a memória e gastar tempo com arquivos já processados. Tabelas que foram carregadas em dias diferentes em algum momento teriam de estar sincronizadas

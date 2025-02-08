@@ -1,0 +1,5 @@
+playerId,headshot,gamesPlayed,gamesStarted,wins,losses,overtimeLosses,goalsAgainstAverage,savePercentage,shotsAgainst,saves,goalsAgainst,shutouts,goals,assists,points,penaltyMinutes,timeOnIce,firstName.default,lastName.default,season,gameType,filename
+8468011,https://assets.nhle.com/mugs/nhl/20182019/ANA/8468011.png,20,17,8,7,2,2.75974,0.911765,578,527,51,1,0,0,0,0,66528,Ryan,Miller,20182019,2,raw_stats_club_ANA_20182019_2
+8473434,https://assets.nhle.com/mugs/nhl/20182019/ANA/8473434.png,9,4,0,5,0,3.753519,0.871795,156,136,20,0,0,0,0,0,19182,Chad,Johnson,20182019,2,raw_stats_club_ANA_20182019_2
+8476434,https://assets.nhle.com/mugs/nhl/20182019/ANA/8476434.png,58,57,26,22,8,2.839439,0.916757,1838,1685,153,2,0,0,0,2,193982,John,Gibson,20182019,2,raw_stats_club_ANA_20182019_2
+8479294,https://assets.nhle.com/mugs/nhl/20182019/ANA/8479294.png,5,4,1,3,0,2.167239,0.928058,139,129,10,1,0,0,0,0,16611,Kevin,Boyle,20182019,2,raw_stats_club_ANA_20182019_2

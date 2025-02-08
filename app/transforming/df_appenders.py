@@ -127,7 +127,7 @@ if __name__ == "__main__":
     # processed_stats_skaters()
     # processed_team_season()
     #  processed_play_by_play()
-    processed_game_details()
+    # processed_game_details()
     # processed_game_boxscore_game()
     # processed_game_boxscore_players()
     pass

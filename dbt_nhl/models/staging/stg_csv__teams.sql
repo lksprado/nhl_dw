@@ -3,9 +3,9 @@ with source as (
   ),
   renamed as (
       select
-      "triCode" as team_id,
+      "tricode" as team_id,
       {{ string_to_int('id') }} as team_code,
-      "fullName" as full_name
+      "fullname" as full_name
       from source
   )
   select * from renamed

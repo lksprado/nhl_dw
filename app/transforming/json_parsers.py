@@ -47,13 +47,6 @@ def raw_teams():
     parsing_json_pandas_5(input_file, output)
 
 
-@track_time
-def raw_game_info():
-    output = "data/csv_data/raw/single"
-    input_file = "data/json_data/single/raw_game_info.json"
-    parsing_json_pandas_5(input_file, output)
-
-
 ######## FOLDERS ##############################################################################################
 
 

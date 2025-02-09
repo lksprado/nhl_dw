@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def create_and_load_table_with_sk(file, table, sk):
+def create_and_load_table_with_sk(file, table, sk: list):
     """Only for first load. Define a column to be used as id and unique"""
     # Configuração do banco de dados PostgreSQL
     db_config = {
@@ -38,15 +38,21 @@ def create_and_load_table_with_sk(file, table, sk):
     cursor.execute(f"SET search_path TO {schema_name};")
     conn.commit()
 
+    sk_concat = " || '_' || ".join(
+        [f"COALESCE(REPLACE({col}, '.0', ''),'')" for col in sk] + ["filename"]
+    )
+
     # Criar tabela com surrogate key e composite key (não adiciona filename na criação)
     create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
             {', '.join([f'"{col}" TEXT' for col in col_names])},
-            sk_{sk}_filename TEXT GENERATED ALWAYS AS (
-                MD5(REPLACE({sk}, '.0', '') || '_' || filename)
-            ) STORED, UNIQUE (sk_{sk}_filename)
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            sk TEXT GENERATED ALWAYS AS (
+                MD5({sk_concat})
+            ) STORED, UNIQUE (sk)
         );
     """
+
     cursor.execute(create_table_query)
     conn.commit()
 
@@ -107,6 +113,7 @@ def create_and_load_table_with_pk(file, table, pk):
     create_table_query = f"""
         CREATE TABLE IF NOT EXISTS {table_name} (
             {', '.join([f'"{col}" TEXT' for col in col_names])},
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE ({pk})
         );
     """
@@ -135,7 +142,7 @@ def create_and_load_table_with_pk(file, table, pk):
     con.close()
 
 
-def update_table_with_sk(file, table, sk):
+def update_table_with_sk(file, table, sk: list):
     """
     Cria uma tabela temporária, carrega dados nela e faz um UPSERT na tabela original.
     Define uma coluna para ser usada como ID.
@@ -169,13 +176,18 @@ def update_table_with_sk(file, table, sk):
     cursor.execute(f"SET search_path TO {schema_name};")
     conn.commit()
 
+    sk_concat = " || '_' || ".join(
+        [f"COALESCE(REPLACE({col}, '.0', ''),'')" for col in sk] + ["filename"]
+    )
+
     # Criar a tabela temporária
     create_temp_table_query = f"""
         CREATE TEMP TABLE IF NOT EXISTS {temp_table_name} (
             {', '.join([f'"{col}" TEXT' for col in col_names])},
-            sk_{sk}_filename TEXT GENERATED ALWAYS AS (
-                MD5(REPLACE({sk}, '.0', '') || '_' || filename)
-            ) STORED, UNIQUE (sk_{sk}_filename)
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            sk TEXT GENERATED ALWAYS AS (
+                MD5({sk_concat})
+            ) STORED, UNIQUE (sk)
         );
     """
     cursor.execute(create_temp_table_query)
@@ -200,9 +212,9 @@ def update_table_with_sk(file, table, sk):
     INSERT INTO {table_name} ({', '.join([f'"{col}"' for col in col_names])})
     SELECT {', '.join([f'"{col}"' for col in col_names])}
     FROM {temp_table_name}
-    ON CONFLICT (sk_{sk}_filename)
+    ON CONFLICT (sk)
     DO UPDATE SET
-    {', '.join([f'{col} = EXCLUDED.{col}' for col in col_names if col != f'sk_{sk}_filename'])};
+    {', '.join([f'{col} = EXCLUDED.{col}' for col in col_names if col != f'{sk_concat}'])};
     """
     cursor.execute(upsert_query)
     conn.commit()
@@ -255,6 +267,7 @@ def update_table_with_pk(file, table, pk):
     create_temp_table_query = f"""
         CREATE TEMP TABLE IF NOT EXISTS {temp_table_name} (
             {', '.join([f'"{col}" TEXT' for col in col_names])},
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             UNIQUE ({pk})
         );
     """

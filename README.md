@@ -13,3 +13,4 @@ No entanto, no universo da engenharia é sempre preciso lidar com situações in
  - Modelagem requer uma atenção especial e o dbt é essencial para manter uma documentação mínima e funcional para que os modelos sejam significativos
  - Após a primeira carga como estabilizar e concatenar dados incompletos e atualizados
  - Como reprocessar e recarregar um processo sem onerar a memória e gastar tempo com arquivos já processados. Tabelas que foram carregadas em dias diferentes em algum momento teriam de estar sincronizadas
+ - integridade de dados

@@ -4,15 +4,15 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
 import glob
-import re
-import time
+from datetime import date
+from multiprocessing import Pool, cpu_count
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from utils.time_tracker import track_time
 import pandas as pd
 import json
 from app.extraction.generic_get_results import make_request, save_json
-from multiprocessing import Pool, cpu_count
 from app.transforming.generic_df_appenders import df_appender_folder
+from app.loading.data_loader_duckdb import update_table_with_sk
 
 
 ## raw_all_game_log
@@ -29,46 +29,36 @@ def extract_game_log():
     """
     Pegar a lista de jogadores da atual temporada, season type e atualizar com update
     """
-    start_time = time.time()
 
     URL = "https://api-web.nhle.com/v1/player/{player_id}/game-log/{season_id}/{season_type}"
     OUTPUT_DIR = "data/json_data/raw_game_log/landing"
 
-    parameters_input = "app/all_game_logs_till_2025.csv"
-    df_parameter = pd.read_csv(parameters_input)
-    df_parameter = df_parameter.sort_values(
-        by=["season_id", "player_id", "game_type_id"], ascending=False
-    )
+    df_players = pd.read_csv("app/api_parameters/active_playerid.csv")
+    df_team_season = pd.read_csv("app/api_parameters/seasonid_teamid_game_type.csv")
+    df_team_season = df_team_season[["season_id", "game_type"]].drop_duplicates()
 
-    pattern = os.path.join(OUTPUT_DIR, "*_*_*.json")
-    files_to_skip = glob.glob(pattern)
-    existing_combinations = set()
-    for file in files_to_skip:
-        match = re.search(r"(\d+)_(\d+)_(\d+)\.json", os.path.basename(file))
-        if match:
-            player_id = match.group(1)
-            season_id = match.group(2)
-            game_type_id = match.group(3)
-            existing_combinations.add((player_id, season_id, game_type_id))
+    max_season_id = df_team_season["season_id"].max()
+    max_game_type = df_team_season["game_type"].max()
 
-    df_filtered = df_parameter[
-        ~df_parameter.apply(
-            lambda row: (
-                str(row["player_id"]),
-                str(row["season_id"]),
-                str(row["game_type_id"]),
-            )
-            in existing_combinations,
-            axis=1,
-        )
-    ]
+    # Filtra primeiro pelo max_season_id
+    df_filtered = df_team_season[df_team_season["season_id"] == max_season_id]
+
+    # Agora pega o maior game_type dentro do max_season_id
+    max_game_type = df_filtered["game_type"].max()
+
+    # Filtra novamente considerando ambos os critérios
+    df_team_season = df_filtered[df_filtered["game_type"] == max_game_type]
+
+    df_filtered = df_players.merge(df_team_season, how="cross")
+
+    df_filtered.to_csv("app/raw_all_game_log_ETL/teste.csv")
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
         for row in df_filtered.itertuples():
-            player_id = row.player_id
+            player_id = row.playerid
             season_id = row.season_id
-            game_type_id = row.game_type_id
+            game_type_id = row.game_type
             url = URL.format(
                 player_id=player_id, season_id=season_id, season_type=game_type_id
             )
@@ -88,13 +78,6 @@ def extract_game_log():
                 future.result()
             except Exception as e:
                 print(f"Exception occurred: {e}")
-
-        end_time = time.time()
-        dif = end_time - start_time
-        hours, remainder = divmod(dif, 3600)
-        minutes, seconds = divmod(remainder, 60)
-
-        print(f"Done in {int(hours)}h {int(minutes)}m  {int(seconds)}s")
 
 
 def process_single_file(input_file, OUTPUT_DIR):
@@ -128,7 +111,7 @@ def tansform_raw_game_log():
     """
     Processa todos os arquivos JSON no diretório de entrada e os converte para CSV.
     """
-    pattern = "data/json_data/raw_game_log/*_*_*.json"
+    pattern = "data/json_data/raw_game_log/landing/*_*_*.json"
     OUTPUT_DIR = "data/csv_data/raw/raw_game_log/staging"
     input_files = glob.glob(pattern)
 
@@ -138,16 +121,27 @@ def tansform_raw_game_log():
 
 
 @track_time
-def processed_game_log():
+def append_game_log():
+    today = date.today()
+    today = today.strftime("%Y-%m-%d")
     output_file_name = "all_game_log"
     input_csv_dir = "data/csv_data/raw/raw_game_log/staging"
     output_dir = "data/csv_data/processed"
-    df_appender_folder(output_file_name, input_csv_dir, output_dir)
+    df_appender_folder(f"{output_file_name}_{today}", input_csv_dir, output_dir)
+
+
+def load_game_log():
+    # create_and_load_table_with_sk('data/csv_data/processed/all_game_log.csv','raw_game_log',['gameid','filename'])
+    update_table_with_sk(
+        "data/csv_data/processed/all_game_log_2025-02-09.csv",
+        "raw_game_log",
+        ["gameid", "filename"],
+    )
 
 
 if __name__ == "__main__":
-    # get_game_log()
+    # extract_game_log()
     # tansform_raw_game_log()
-    # processed_game_log()
-    # create_and_load_table('data/csv_data/processed/all_game_log.csv','raw_game_log')
+    # append_game_log()
+    load_game_log()
     pass

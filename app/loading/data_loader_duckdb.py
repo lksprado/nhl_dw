@@ -70,7 +70,6 @@ def create_and_load_table_with_sk(file, table, sk: list):
         )
 
     conn.commit()
-    print(f"Tabela '{schema_name}.{table_name}' criada e dados carregados com sucesso.")
 
     # Fechar conexões
     cursor.close()
@@ -134,7 +133,6 @@ def create_and_load_table_with_pk(file, table, pk):
         )
 
     conn.commit()
-    print(f"Tabela '{schema_name}.{table_name}' criada e dados carregados com sucesso.")
 
     # Fechar conexões
     cursor.close()
@@ -219,10 +217,6 @@ def update_table_with_sk(file, table, sk: list):
     cursor.execute(upsert_query)
     conn.commit()
 
-    print(
-        f"Tabela temporária '{schema_name}.{temp_table_name}' criada, dados carregados e UPSERT feito na tabela '{table_name}' com sucesso."
-    )
-
     # Fechar conexões
     cursor.close()
     conn.close()
@@ -299,10 +293,6 @@ def update_table_with_pk(file, table, pk):
     """
     cursor.execute(upsert_query)
     conn.commit()
-
-    print(
-        f"Tabela temporária '{schema_name}.{temp_table_name}' criada, dados carregados e UPSERT feito na tabela '{table_name}' com sucesso."
-    )
 
     # Fechar conexões
     cursor.close()

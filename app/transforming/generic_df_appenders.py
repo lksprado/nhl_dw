@@ -18,6 +18,9 @@ def df_appender_file(filename):
 
 
 def df_appender_folder(output_file_name, input_csv_dir, output_dir):
+    """
+    Appends all files and return the output filepath
+    """
     all_files = [
         os.path.join(input_csv_dir, f)
         for f in os.listdir(input_csv_dir)
@@ -30,10 +33,7 @@ def df_appender_folder(output_file_name, input_csv_dir, output_dir):
     # Filtra os DataFrames válidos (não None)
     dfs = [df for df in dfs if df is not None]
 
-    if dfs:
-        frame = pd.concat(dfs, axis=0, ignore_index=True)
-        output_path = os.path.join(output_dir, f"{output_file_name}.csv")
-        frame.to_csv(output_path, index=False)
-        print(f"Arquivo salvo em: {output_path}")
-    else:
-        print("Nenhum arquivo válido para processar.")
+    frame = pd.concat(dfs, axis=0, ignore_index=True)
+    output_path = os.path.join(output_dir, f"{output_file_name}.csv")
+    frame.to_csv(output_path, index=False)
+    return output_path

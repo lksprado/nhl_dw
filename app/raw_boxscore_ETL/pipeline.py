@@ -10,7 +10,6 @@ import psycopg2
 from dotenv import load_dotenv
 from app.extraction.generic_get_results import make_request, save_json
 from app.transforming.generic_df_appenders import df_appender_folder
-from app.loading.data_loader_duckdb import copy_with_update
 from utils.time_tracker import track_time
 
 load_dotenv()
@@ -57,7 +56,7 @@ def extract_boxscore():
 
 @track_time
 def transform_boxscore_games():
-    INPUT_DIR = "data/landing/boxscore"
+    INPUT_DIR = "data/raw_boxscore/landing"
     OUTPUT_DIR = "data/csv_data/staging"  #'data/csv_data/raw/raw_boxscore_game'
     json_dir = os.listdir(INPUT_DIR)
 
@@ -196,20 +195,5 @@ def append_boxscore_players():
 if __name__ == "__main__":
     # extract_boxscore()
     # transform_boxscore_games()
-    # append_boxscore_game()
-
-    # Multiprocessing para processar vários arquivos em paralelo
-
-    # with Pool(cpu_count()) as pool:
-    #     # Usando apply_async para chamar a função sem argumentos
-    #     results = [pool.apply_async(transform_boxscore_players) for _ in range(len(os.listdir('data/json_data/raw_boxscore')))]
-    #     for result in results:
-    #         result.get()
-    # transform_boxscore_players()
-    # append_boxscore_players()
-    # create_and_load_table('data/csv_data/processed/first_loads/boxscore_players.csv', 'raw_boxscore_players')
-    copy_with_update(
-        "data/csv_data/processed/boxscore_players_2025-02-05.csv",
-        "raw_boxscore_players",
-    )
+    append_boxscore_game()
     pass

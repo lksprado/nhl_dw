@@ -2,56 +2,58 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
+import shutil
 import glob
+import pandas as pd
+import json
+import time
+from loguru import logger
 from datetime import date
 from multiprocessing import Pool, cpu_count
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from utils.time_tracker import track_time
-import pandas as pd
-import json
 from app.extraction.generic_get_results import make_request, save_json
 from app.transforming.generic_df_appenders import df_appender_folder
 from app.loading.data_loader_duckdb import update_table_with_sk
 
 
+LOG_FILE = "app/raw_all_game_log_ETL_ETL/app/raw_all_game_log_log.log"
+logger.remove()
+logger.add(
+    sys.stdout, format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", level="INFO"
+)
+logger.add(
+    LOG_FILE,
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    level="INFO",
+    rotation="10 MB",
+)
+
+
 ## raw_all_game_log
 def fetch_and_save_game_log(player_id, season_id, season_step, url, output_dir):
     data, _ = make_request(url)
-    if data:
-        save_json(f"{player_id}_{season_id}_{season_step}", data, output_dir)
-        print(f"Data collected --- {url}")
-    else:
-        print(f"Failed --- {url}")
+    logger.info(f"Data Collected --- {url}")
+    save_json(f"{player_id}_{season_id}_{season_step}", data, output_dir)
 
 
 def extract_game_log():
     """
-    Pegar a lista de jogadores da atual temporada, season type e atualizar com update
+    Game results per game per player in given season
     """
 
     URL = "https://api-web.nhle.com/v1/player/{player_id}/game-log/{season_id}/{season_type}"
     OUTPUT_DIR = "data/json_data/raw_game_log/landing"
 
     df_players = pd.read_csv("app/api_parameters/active_playerid.csv")
-    df_team_season = pd.read_csv("app/api_parameters/seasonid_teamid_game_type.csv")
-    df_team_season = df_team_season[["season_id", "game_type"]].drop_duplicates()
+    df_season_game = pd.read_csv("app/api_parameters/seasonid_teamid_game_type.csv")
+    df_season_game = df_season_game[["season_id", "game_type"]].drop_duplicates()
 
-    max_season_id = df_team_season["season_id"].max()
-    max_game_type = df_team_season["game_type"].max()
-
-    # Filtra primeiro pelo max_season_id
-    df_filtered = df_team_season[df_team_season["season_id"] == max_season_id]
-
-    # Agora pega o maior game_type dentro do max_season_id
+    max_season_id = df_season_game["season_id"].max()
+    max_game_type = df_season_game["game_type"].max()
+    df_filtered = df_season_game[df_season_game["season_id"] == max_season_id]
     max_game_type = df_filtered["game_type"].max()
-
-    # Filtra novamente considerando ambos os critérios
     df_team_season = df_filtered[df_filtered["game_type"] == max_game_type]
-
     df_filtered = df_players.merge(df_team_season, how="cross")
-
-    df_filtered.to_csv("app/raw_all_game_log_ETL/teste.csv")
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
@@ -77,12 +79,12 @@ def extract_game_log():
             try:
                 future.result()
             except Exception as e:
-                print(f"Exception occurred: {e}")
+                logger.error(f"Error --- {e}")
 
 
 def process_single_file(input_file, OUTPUT_DIR):
     """
-    Processa um único arquivo JSON e salva o resultado como CSV.
+    Process a single Json and save it as CSV
     """
     try:
         file = os.path.basename(input_file)
@@ -102,12 +104,12 @@ def process_single_file(input_file, OUTPUT_DIR):
 
         output_file = file_path + ".csv"
         df.to_csv(output_file, index=False)
-        print(f"Arquivo salvo: {output_file}")
+        logger.info(f"Saved file: {output_file}")
     except Exception as e:
-        print(f"Erro ao processar arquivo {input_file}: {e}")
+        logger.error(f"Error in file {input_file} --- {e}")
 
 
-def tansform_raw_game_log():
+def transform_game_log():
     """
     Processa todos os arquivos JSON no diretório de entrada e os converte para CSV.
     """
@@ -117,31 +119,108 @@ def tansform_raw_game_log():
 
     with Pool(cpu_count()) as pool:
         pool.starmap(process_single_file, [(file, OUTPUT_DIR) for file in input_files])
-    print("Done")
 
 
-@track_time
 def append_game_log():
     today = date.today()
     today = today.strftime("%Y-%m-%d")
-    output_file_name = "all_game_log"
-    input_csv_dir = "data/csv_data/raw/raw_game_log/staging"
-    output_dir = "data/csv_data/processed"
-    df_appender_folder(f"{output_file_name}_{today}", input_csv_dir, output_dir)
+    OUTPUT_FILE_NAME = "all_game_log"
+    INPUT_CSV_DIR = "data/csv_data/raw/raw_game_log/staging"
+    OUTPUT_CSV_DIR = "data/csv_data/processed"
+    try:
+        appended_file = df_appender_folder(
+            f"{OUTPUT_FILE_NAME}_{today}", INPUT_CSV_DIR, OUTPUT_CSV_DIR
+        )
+        logger.info(f"File {OUTPUT_FILE_NAME} created succesfuly in {OUTPUT_CSV_DIR}")
+        return appended_file
+
+    except FileNotFoundError as e:
+        logger.info(f"File or folder not found --- {e}")
 
 
-def load_game_log():
+def load_game_log(file):
     # create_and_load_table_with_sk('data/csv_data/processed/all_game_log.csv','raw_game_log',['gameid','filename'])
-    update_table_with_sk(
-        "data/csv_data/processed/all_game_log_2025-02-09.csv",
-        "raw_game_log",
-        ["gameid", "filename"],
+    try:
+        update_table_with_sk(
+            file,
+            "raw_game_log",
+            ["gameid", "filename"],
+        )
+        logger.info(f"✅ File {file} has been loaded in nhl_raw.raw_game_log")
+        return file
+    except Exception as e:
+        logger.error(f"Failed to load {file} --- {e}")
+
+
+def clear_staging_landing_loading(file):
+    JSON_LANDING_DIR = (
+        "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_game_log/landing"
     )
+    JSON_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_game_log"
+    CSV_STAGING_DIR = (
+        "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_game_log/staging"
+    )
+    CSV_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_game_log"
+    LOAD_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed"
+    STORED_LOADS = (
+        "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed/flow_loads"
+    )
+
+    ## MOVE JSON FILES
+    try:
+        for filename in os.listdir(JSON_LANDING_DIR):
+            source_path = os.path.join(JSON_LANDING_DIR, filename)
+            destination_path = os.path.join(JSON_DIR, filename)
+            shutil.move(source_path, destination_path)
+        logger.info(f"Json files in {JSON_LANDING_DIR} moved to {JSON_DIR}")
+    except FileNotFoundError as e:
+        logger.warning(f"Failed to move json files --- {e}")
+
+    ## MOVE CSV FILES
+    try:
+        for filename in os.listdir(CSV_STAGING_DIR):
+            source_path = os.path.join(CSV_STAGING_DIR, filename)
+            destination_path = os.path.join(CSV_DIR, filename)
+            shutil.move(source_path, destination_path)
+        logger.info(f"Csv files in {CSV_STAGING_DIR} moved to {CSV_DIR}")
+    except FileNotFoundError:
+        logger.warning("Failed to move csv files")
+
+    ## MOVE LOAD FILE
+    try:
+        file_only = os.path.basename(file)
+        source_path = os.path.join(LOAD_DIR, file_only)
+        destination_path = os.path.join(STORED_LOADS, file_only)
+        shutil.move(source_path, destination_path)
+    except FileNotFoundError as e:
+        logger.warning(f"Failed to move loaded csv file -- {e}")
+
+
+def run():
+    try:
+        start_time = time.time()
+
+        extract_game_log()
+        transform_game_log()
+        appended_file = append_game_log()
+        loaded_file = load_game_log(appended_file)
+        clear_staging_landing_loading(loaded_file)
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        minutes = int(elapsed_time // 60)
+        seconds = elapsed_time % 60
+        logger.info(
+            f"✅✅✅ Pipeline completed succesfuly in {minutes}min. {seconds:.0f}s."
+        )
+    except Exception as e:
+        logger.error(f"❌❌❌ Pipeline failed --- {e}")
 
 
 if __name__ == "__main__":
     # extract_game_log()
     # tansform_raw_game_log()
     # append_game_log()
-    load_game_log()
+    # load_game_log()
+    run()
     pass

@@ -29,11 +29,7 @@ logger.add(
 
 def fetch_and_save_club_stats(team_id, season_id, game_type, url, output_dir):
     data, _ = make_request(url)
-    if data:
-        save_json(f"raw_stats_club_{team_id}_{season_id}_{game_type}", data, output_dir)
-        print(f"Data collected --- {url}")
-    else:
-        print(f"Failed --- {url}")
+    save_json(f"raw_stats_club_{team_id}_{season_id}_{game_type}", data, output_dir)
 
 
 def extract_club_stats_historic():
@@ -49,19 +45,6 @@ def extract_club_stats_historic():
     df_parameter = df_parameter.sort_values(
         by=["season_id", "team_id", "game_type"], ascending=False
     )
-
-    # max_season_id = df_parameter["season_id"].max()
-    # df_filtered = df_parameter[df_parameter["season_id"] == max_season_id]
-    # unique_teams = df_filtered["team_id"].unique()
-    # for team_id in unique_teams:
-    #     url = URL.format(
-    #         team_id=team_id, season_id=max_season_id, season_step=season_type
-    #     )
-    #     data, _ = make_request(url)
-    #     save_json(
-    #         f"stats_club_{team_id}_{max_season_id}_{season_type}", data, OUTPUT_DIR
-    #     )
-
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = []
         for row in df_parameter.itertuples():

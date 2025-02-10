@@ -19,7 +19,7 @@ def make_request(url: str, retries=2):
     """
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, timeout=15)
             response.raise_for_status()
             return response.json(), response.url
         except requests.exceptions.RequestException as e:

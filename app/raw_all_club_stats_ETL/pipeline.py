@@ -69,7 +69,7 @@ def extract_club_stats_historic():
             try:
                 future.result()
             except Exception as e:
-                print(f"Exception occurred: {e}")
+                logger.error(f"Exception occurred: {e}")
 
 
 def extract_club_stats():

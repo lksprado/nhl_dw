@@ -16,7 +16,7 @@ from app.transforming.generic_df_appenders import df_appender_folder
 from app.loading.data_loader_duckdb import update_table_with_sk
 
 
-LOG_FILE = "app/raw_all_game_log_ETL_ETL/app/raw_all_game_log_log.log"
+LOG_FILE = "app/raw_all_game_log_ETL/raw_all_game_log_log.log"
 logger.remove()
 logger.add(
     sys.stdout, format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", level="INFO"

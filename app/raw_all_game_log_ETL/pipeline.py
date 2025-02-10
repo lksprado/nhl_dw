@@ -82,14 +82,14 @@ def extract_game_log():
                 logger.error(f"Error --- {e}")
 
 
-def process_single_file(input_file, OUTPUT_DIR):
+def process_single_file(input_file, output_dir):
     """
     Process a single Json and save it as CSV
     """
     try:
         file = os.path.basename(input_file)
         file = os.path.splitext(file)[0]
-        file_path = os.path.join(OUTPUT_DIR, file)
+        file_path = os.path.join(output_dir, file)
         with open(input_file) as f:
             data = json.load(f)
 
@@ -113,9 +113,9 @@ def transform_game_log():
     """
     Processa todos os arquivos JSON no diretório de entrada e os converte para CSV.
     """
-    pattern = "data/json_data/raw_game_log/landing/*_*_*.json"
+    PATTERN = "data/json_data/raw_game_log/landing/*_*_*.json"
     OUTPUT_DIR = "data/csv_data/raw/raw_game_log/staging"
-    input_files = glob.glob(pattern)
+    input_files = glob.glob(PATTERN)
 
     with Pool(cpu_count()) as pool:
         pool.starmap(process_single_file, [(file, OUTPUT_DIR) for file in input_files])

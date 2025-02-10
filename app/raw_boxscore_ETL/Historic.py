@@ -7,8 +7,6 @@ import pandas as pd
 import json
 from multiprocessing import Pool, cpu_count
 from loguru import logger
-from datetime import date
-from app.transforming.generic_df_appenders import df_appender_folder
 
 
 LOG_FILE = "app/raw_boxscore_ETL/raw_boxscore_ETL_log_log.log"
@@ -22,42 +20,6 @@ logger.add(
     level="INFO",
     rotation="2 MB",
 )
-
-
-# def extract_boxscore():
-#     OUTPUT_DIR = "data/landing/boxscore"
-
-#     ## CONNECT TO
-#     db_config = {
-#         "dbname": os.getenv("PG_DATABASE"),
-#         "user": os.getenv("PG_USER"),
-#         "password": os.getenv("PG_PASSWORD"),
-#         "host": os.getenv("PG_HOST"),
-#         "port": os.getenv("PG_PORT"),
-#     }
-#     conn = psycopg2.connect(**db_config)
-#     cursor = conn.cursor()
-#     cursor.execute("SELECT * FROM nhl_raw.stg_csv__gameid_to_get")
-#     results = cursor.fetchall()
-
-#     colnames = [desc[0] for desc in cursor.description]
-
-#     df = pd.DataFrame(results, columns=colnames)
-
-#     cursor.close()
-#     conn.close()
-#     games = df["id"]
-
-#     for game in games:
-#         data, _ = make_request(
-#             f"https://api-web.nhle.com/v1/gamecenter/{game}/boxscore"
-#         )
-#         if data:
-#             save_json(f"raw_{game}_boxcore", data, OUTPUT_DIR)
-#             print(f"Data collected --- {game}")
-#         else:
-#             print(f"Failed --- {game}")
-#     pass
 
 ######################################################################################################################################################################
 
@@ -122,15 +84,6 @@ def transform_boxscore_games_worker(input_file):
         print(f"Error --- {e}")
 
 
-def append_boxscore_game():
-    today = date.today()
-    today = today.strftime("%Y-%m-%d")
-    output_file_name = "boxscore_games"
-    input_csv_dir = "data/csv_data/staging"
-    output_dir = "data/csv_data/processed"
-    df_appender_folder(f"{output_file_name}_{today}", input_csv_dir, output_dir)
-
-
 ######################################################################################################################################################################
 
 
@@ -177,15 +130,6 @@ def transform_boxscore_players_worker(input_file):
 
     except Exception as e:
         logger.error(f"Error processing {input_file}: {e}")
-
-
-def append_boxscore_players():
-    today = date.today()
-    today = today.strftime("%Y-%m-%d")
-    output_file_name = "boxscore_players"
-    input_csv_dir = "data/csv_data/raw/raw_boxscore_players"  # "data/csv_data/staging"
-    output_dir = "data/csv_data/processed/first_loads"
-    df_appender_folder(f"{output_file_name}", input_csv_dir, output_dir)
 
 
 if __name__ == "__main__":

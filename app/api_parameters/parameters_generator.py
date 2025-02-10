@@ -145,9 +145,60 @@ def generate_boxscore_gameids():
     df.to_csv("app/api_parameters/boxscore_gameids.csv", index=False)
 
 
+def generate_gamedetails_gameids():
+    ## CONNECT TO
+    db_config = {
+        "dbname": os.getenv("PG_DATABASE"),
+        "user": os.getenv("PG_USER"),
+        "password": os.getenv("PG_PASSWORD"),
+        "host": os.getenv("PG_HOST"),
+        "port": os.getenv("PG_PORT"),
+    }
+    conn = psycopg2.connect(**db_config)
+    cursor = conn.cursor()
+
+    query = """
+    with
+    agenda AS (
+        SELECT
+        *
+        FROM nhl_raw.raw_game_info
+        WHERE
+        "gamestateid" IN ('1','7')
+        AND "gameschedulestateid" = '1'
+        AND "gametype" IN ('2','3')
+        AND "period" IS NOT NULL
+        ),
+    got_data AS (
+        SELECT SUBSTRING(filename FROM 5 FOR 10) as id FROM nhl_raw.raw_game_details
+        )
+    SELECT a.* FROM agenda a
+    LEFT JOIN got_data gd
+    ON a.id = gd.id
+    WHERE gd.id IS NULL
+    AND to_date(a."gamedate",'YYYY-MM-DD') < current_date
+    ORDER BY id desc
+
+    """
+    cursor.execute(query)
+    results = cursor.fetchall()
+
+    colnames = [desc[0] for desc in cursor.description]
+
+    df = pd.DataFrame(results, columns=colnames)
+
+    cursor.close()
+    conn.close()
+
+    df = df["id"]
+
+    df.to_csv("app/api_parameters/gamedetails_gameids.csv", index=False)
+
+
 if __name__ == "__main__":
     # generate_seasonid_list()
     # generate_seasonid_gametypeid_list()
     # generate_seasonid_teamid_gametypeid_list()
     # generate_active_players_list()
-    generate_boxscore_gameids()
+    # generate_boxscore_gameids()
+    generate_gamedetails_gameids()

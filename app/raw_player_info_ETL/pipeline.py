@@ -2,15 +2,15 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-import glob
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import pandas as pd
 import shutil
 import json
 import time
+import glob
 from loguru import logger
 from datetime import date
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from app.extraction.generic_get_results import make_request, save_json
 from app.transforming.generic_df_appenders import df_appender_folder
 from app.loading.data_loader_duckdb import update_table_with_pk

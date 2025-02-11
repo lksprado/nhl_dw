@@ -28,10 +28,7 @@ logger.add(
 
 
 def extract_goalie_stats():
-    """
-    #### Daily Update
-    Goalie stats per season, update daily
-    """
+    """Abstract function for multi-threading use"""
     URL = "https://api.nhle.com/stats/rest/en/goalie/summary?limit=-1&cayenneExp=seasonId={season_id}"
     OUTPUT_DIR = "data/json_data/raw_all_goalies_stats/landing"
     PARAMETER_FILE = "app/api_parameters/season_ids.csv"
@@ -50,6 +47,7 @@ def extract_goalie_stats():
 
 
 def transform_goalie_stats():
+    """Transform all json to csv files"""
     PATTERN = (
         "data/json_data/raw_all_goalies_stats/landing/raw_stats_all_goalies_*.json"
     )
@@ -79,6 +77,7 @@ def transform_goalie_stats():
 
 
 def append_goalies_stats():
+    """Concatenates all csv files to a single one for loading purposes"""
     today = date.today()
     today = today.strftime("%Y-%m-%d")
     OUTPUT_FILE_NAME = "all_goalies_stats"
@@ -96,6 +95,7 @@ def append_goalies_stats():
 
 
 def load_goalies_stats(file):
+    """Loads csv file through upserting"""
     try:
         update_table_with_sk(
             file, "raw_all_goalies_stats", ["playerid", "seasonid", "gamesplayed"]
@@ -107,6 +107,7 @@ def load_goalies_stats(file):
 
 
 def clear_staging_landing_loading(file):
+    """Move files for storage"""
     JSON_LANDING_DIR = "data/json_data/raw_all_goalies_stats/landing"
     JSON_DIR = "data/json_data/raw_all_goalies_stats"
     CSV_STAGING_DIR = "data/csv_data/raw/raw_all_goalies_stats/staging"
@@ -163,9 +164,5 @@ def run():
 
 
 if __name__ == "__main__":
-    # extract_goalie_stats()
-    # transform_goalie_stats()
-    # append_goalies_stats()
-    # load_goalies_stats()
     run()
     pass

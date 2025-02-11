@@ -28,6 +28,7 @@ logger.add(
 
 
 def extract_boxscore():
+    """Abstract function for multi-threading use"""
     OUTPUT_DIR = "data/json_data/raw_boxscore/landing"
 
     games = pd.read_csv("app/api_parameters/boxscore_gameids.csv")
@@ -45,6 +46,7 @@ def extract_boxscore():
 
 
 def transform_boxscore_games():
+    """Transform all json to csv files"""
     PATTERN = "data/json_data/raw_boxscore/landing/raw_*_details.json"
     OUTPUT_DIR = "data/csv_data/raw/raw_boxscore_game/staging"
 
@@ -111,6 +113,7 @@ def transform_boxscore_games():
 
 
 def append_boxscore_game():
+    """Concatenates all csv files to a single one for loading purposes"""
     today = date.today()
     today = today.strftime("%Y-%m-%d")
     OUTPUT_FILE_NAME = "boxscore_games"
@@ -128,6 +131,7 @@ def append_boxscore_game():
 
 
 def load_boxscore_game(file):
+    """Loads csv file through upserting"""
     try:
         update_table_with_pk(
             file,

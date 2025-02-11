@@ -5,7 +5,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 import json
 import requests
-from src.logger import logger
 
 
 def make_request(url: str, retries=2):
@@ -23,9 +22,9 @@ def make_request(url: str, retries=2):
             response.raise_for_status()
             return response.json(), response.url
         except requests.exceptions.RequestException as e:
-            logger.error(f"Attempt {attempt + 1} failed: {e} - {url}")
+            print(f"Attempt {attempt + 1} failed: {e} - {url}")
             if attempt == retries - 1:
-                logger.error(f"All {retries} attempts failed.")
+                print(f"All {retries} attempts failed.")
                 return None, None
 
 
@@ -43,6 +42,6 @@ def save_json(file_name: str, data, output_json_dir):
         file_path = os.path.join(output_json_dir, f"{file_name}.json")
         with open(file_path, "w", encoding="utf-8") as json_file:
             json.dump(data, json_file, indent=4, ensure_ascii=False)
-        logger.info(f"JSON saved at: {file_path}")
+        print(f"JSON saved at: {file_path}")
     except Exception as e:
-        logger.error(f"Error on save: {e}")
+        print(f"Error on save: {e}")

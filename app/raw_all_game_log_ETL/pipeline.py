@@ -31,6 +31,7 @@ logger.add(
 
 ## raw_all_game_log
 def fetch_and_save_game_log(player_id, season_id, season_step, url, output_dir):
+    """Abstract function for multi-threading use"""
     data, _ = make_request(url)
     logger.info(f"Data Collected --- {url}")
     save_json(f"{player_id}_{season_id}_{season_step}", data, output_dir)
@@ -38,7 +39,8 @@ def fetch_and_save_game_log(player_id, season_id, season_step, url, output_dir):
 
 def extract_game_log():
     """
-    Game results per game per player in given season
+    #### Daily Update
+    Makes the API call based on parameters and saves json file
     """
 
     URL = "https://api-web.nhle.com/v1/player/{player_id}/game-log/{season_id}/{season_type}"
@@ -110,9 +112,7 @@ def process_single_file(input_file, output_dir):
 
 
 def transform_game_log():
-    """
-    Processa todos os arquivos JSON no diretório de entrada e os converte para CSV.
-    """
+    """Transform all json to csv files"""
     PATTERN = "data/json_data/raw_game_log/landing/*_*_*.json"
     OUTPUT_DIR = "data/csv_data/raw/raw_game_log/staging"
     input_files = glob.glob(PATTERN)
@@ -122,6 +122,7 @@ def transform_game_log():
 
 
 def append_game_log():
+    """Concatenates all csv files to a single one for loading purposes"""
     today = date.today()
     today = today.strftime("%Y-%m-%d")
     OUTPUT_FILE_NAME = "all_game_log"
@@ -139,7 +140,7 @@ def append_game_log():
 
 
 def load_game_log(file):
-    # create_and_load_table_with_sk('data/csv_data/processed/all_game_log.csv','raw_game_log',['gameid','filename'])
+    """Loads csv file through upserting"""
     try:
         update_table_with_sk(
             file,
@@ -153,15 +154,12 @@ def load_game_log(file):
 
 
 def clear_staging_landing_loading(file):
-    JSON_LANDING_DIR = (
-        "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_game_log/landing"
-    )
-    JSON_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_game_log"
-    CSV_STAGING_DIR = (
-        "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_game_log/staging"
-    )
-    CSV_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_game_log"
-    LOAD_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed"
+    """Move files for storage"""
+    JSON_LANDING_DIR = "data/json_data/raw_game_log/landing"
+    JSON_DIR = "data/json_data/raw_game_log"
+    CSV_STAGING_DIR = "data/csv_data/raw/raw_game_log/staging"
+    CSV_DIR = "data/csv_data/raw/raw_game_log"
+    LOAD_DIR = "data/csv_data/processed"
     STORED_LOADS = (
         "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed/flow_loads"
     )
@@ -218,9 +216,5 @@ def run():
 
 
 if __name__ == "__main__":
-    # extract_game_log()
-    # tansform_raw_game_log()
-    # append_game_log()
-    # load_game_log()
     run()
     pass

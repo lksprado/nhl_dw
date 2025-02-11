@@ -27,12 +27,8 @@ logger.add(
 )
 
 
-## raw_all_skaters_stats
 def extract_skater_stats():
-    """
-    #### Daily Update
-    Skaters stats per season, update daily
-    """
+    """Abstract function for multi-threading use"""
     URL = "https://api.nhle.com/stats/rest/en/skater/summary?limit=-1&cayenneExp=seasonId={season_id}"
     OUTPUT_DIR = "data/json_data/raw_all_skaters_stats/landing"
     PARAMETER_FILE = "app/api_parameters/season_ids.csv"
@@ -51,6 +47,7 @@ def extract_skater_stats():
 
 
 def transform_skater_stats():
+    """Transform all json to csv files"""
     PATTERN = (
         "data/json_data/raw_all_skaters_stats/landing/raw_stats_all_skaters_*.json"
     )
@@ -78,6 +75,7 @@ def transform_skater_stats():
 
 
 def append_skaters_stats():
+    """Concatenates all csv files to a single one for loading purposes"""
     today = date.today()
     today = today.strftime("%Y-%m-%d")
     OUTPUT_FILE_NAME = "all_skaters_stats"
@@ -95,6 +93,7 @@ def append_skaters_stats():
 
 
 def load_skaters_stats(file):
+    """Loads csv file through upserting"""
     try:
         update_table_with_sk(
             file,
@@ -108,6 +107,7 @@ def load_skaters_stats(file):
 
 
 def clear_staging_landing_loading(file):
+    """Move files for storage"""
     JSON_LANDING_DIR = "data/json_data/raw_all_skaters_stats/landing"
     JSON_DIR = "data/json_data/raw_all_skaters_stats"
     CSV_STAGING_DIR = "data/csv_data/raw/raw_all_skaters_stats/staging"
@@ -174,9 +174,5 @@ def run():
 
 
 if __name__ == "__main__":
-    # extract_skater_stats()
-    # transform_skater_stats()
-    # append_skaters_stats()
-    # create_and_load_table_with_sk('data/csv_data/processed/refactor_loads/all_skaters_stats.csv', "raw_all_skaters_stats", ["playerid", "seasonid", "gamesplayed","teamabbrevs","points"])
     run()
     pass

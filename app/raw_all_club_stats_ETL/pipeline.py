@@ -9,7 +9,6 @@ import json
 import time
 from loguru import logger
 from datetime import date
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from app.extraction.generic_get_results import make_request, save_json
 from app.transforming.generic_df_appenders import df_appender_folder
 from app.loading.data_loader_duckdb import update_table_with_sk
@@ -28,53 +27,15 @@ logger.add(
 
 
 def fetch_and_save_club_stats(team_id, season_id, game_type, url, output_dir):
+    """Abstract function for multi-threading use"""
     data, _ = make_request(url)
     save_json(f"raw_stats_club_{team_id}_{season_id}_{game_type}", data, output_dir)
-
-
-def extract_club_stats_historic():
-    """
-    #### Daily Update
-    """
-
-    URL = "https://api-web.nhle.com/v1/club-stats/{team_id}/{season_id}/{game_type}"
-    OUTPUT_DIR = "data/json_data/raw_club_stats"
-
-    parameters_input = "app/api_parameters/seasonid_teamid_game_type.csv"
-    df_parameter = pd.read_csv(parameters_input)
-    df_parameter = df_parameter.sort_values(
-        by=["season_id", "team_id", "game_type"], ascending=False
-    )
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = []
-        for row in df_parameter.itertuples():
-            team_id = row.team_id
-            season_id = row.season_id
-            game_type_id = row.game_type
-            url = URL.format(
-                team_id=team_id, season_id=season_id, game_type=game_type_id
-            )
-            futures.append(
-                executor.submit(
-                    fetch_and_save_club_stats,
-                    team_id,
-                    season_id,
-                    game_type_id,
-                    url,
-                    OUTPUT_DIR,
-                )
-            )
-
-        for future in as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                logger.error(f"Exception occurred: {e}")
 
 
 def extract_club_stats():
     """
     #### Daily Update
+    Makes the API call based on parameters and saves json file
     """
 
     URL = "https://api-web.nhle.com/v1/club-stats/{team_id}/{season_id}/{game_type}"
@@ -107,10 +68,10 @@ def extract_club_stats():
             logger.info(f"Data Collect --- {file_name}")
         except Exception as e:
             logger.error(f"Failed to collect {url} --- {e}")
-    logger.info("Step 1/5 completed")
 
 
 def transform_club_stats():
+    """Transform all json to csv files"""
     PATTERN = "data/json_data/raw_club_stats/landing/raw_stats_club_*_*_*.json"
     OUTPUT_DIR = "data/csv_data/raw/raw_club_stats/staging"
     input_files = glob.glob(PATTERN)
@@ -172,6 +133,7 @@ def transform_club_stats():
 
 
 def append_club_stats():
+    """Concatenates all csv files to a single one for loading purposes"""
     today = date.today()
     today = today.strftime("%Y-%m-%d")
     OUTPUT_FILE_NAME = "all_club_stats"
@@ -191,7 +153,7 @@ def append_club_stats():
 
 
 def load_club_stats(file):
-    # create_and_load_table_with_sk("data/csv_data/processed/first_loads/all_club_stats.csv", "raw_all_club_stats",['playerid','gamesplayed','positioncode'])
+    """Loads csv file through upserting"""
     try:
         update_table_with_sk(
             file,
@@ -206,18 +168,13 @@ def load_club_stats(file):
 
 
 def clear_staging_landing_loading(file):
-    JSON_LANDING_DIR = (
-        "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_club_stats/landing"
-    )
-    JSON_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/json_data/raw_club_stats"
-    CSV_STAGING_DIR = (
-        "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_club_stats/staging"
-    )
-    CSV_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_club_stats"
-    LOAD_DIR = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed"
-    STORED_LOADS = (
-        "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/processed/flow_loads"
-    )
+    """Move files for storage"""
+    JSON_LANDING_DIR = "data/json_data/raw_club_stats/landing"
+    JSON_DIR = "data/json_data/raw_club_stats"
+    CSV_STAGING_DIR = "data/csv_data/raw/raw_club_stats/staging"
+    CSV_DIR = "data/csv_data/raw/raw_club_stats"
+    LOAD_DIR = "data/csv_data/processed"
+    STORED_LOADS = "data/csv_data/processed/flow_loads"
 
     ## MOVE JSON FILES
     try:
@@ -272,10 +229,5 @@ def run():
 
 
 if __name__ == "__main__":
-    # extract_club_stats_historic()
-    # extract_club_stats()
-    # transform_club_stats()
-    # append_club_stats()
-    # load_club_stats()
     run()
     pass

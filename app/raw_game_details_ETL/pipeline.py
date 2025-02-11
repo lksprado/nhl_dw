@@ -2,7 +2,6 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import shutil
 import glob
@@ -28,7 +27,6 @@ logger.add(
 )
 
 
-## raw_game_details
 def fetch_and_save_game_details(game_id, url, output_dir):
     data, _ = make_request(url)
     logger.info(f"Data collected --- {url}")

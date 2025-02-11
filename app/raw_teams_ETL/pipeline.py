@@ -2,15 +2,27 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
-
-import json
 import pandas as pd
+import json
+import time
+from loguru import logger
 from app.extraction.generic_get_results import make_request, save_json
-from app.loading.data_loader_duckdb import truncate_and_load_table
-from utils.time_tracker import track_time
+from app.loading.data_loader_duckdb import update_table_with_pk
 
 
-@track_time
+LOG_FILE = "app/raw_teams_ETL/raw_teams_log_log.log"
+logger.remove()
+logger.add(
+    sys.stdout, format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}", level="INFO"
+)
+logger.add(
+    LOG_FILE,
+    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",
+    level="INFO",
+    rotation="10 MB",
+)
+
+
 def extract_teams():
     """
     #### Yearly update \n
@@ -19,34 +31,66 @@ def extract_teams():
     URL = "https://api.nhle.com/stats/rest/en/team"
     OUTPUT_DIR = "data/json_data/single"
 
-    data, _ = make_request(URL)
-    save_json("raw_teams", data, OUTPUT_DIR)
+    try:
+        data, _ = make_request(URL)
+        save_json("raw_teams", data, OUTPUT_DIR)
+        logger.info(f"Data collected --- {URL}")
+    except Exception as e:
+        logger.error(f"Failed to collect: {URL}---{e}")
 
 
-@track_time
 def transform_teams():
     INPUT_FILE = "data/json_data/single/raw_teams.json"
-    OUTPUT_PATH = "data/csv_data/raw/single"
+    OUTPUT_PATH = "data/csv_data/processed/flow_loads"
 
-    file = os.path.basename(INPUT_FILE)
-    file = os.path.splitext(file)[0]
+    try:
+        file = os.path.basename(INPUT_FILE)
+        file = os.path.splitext(file)[0]
+        file_path = os.path.join(OUTPUT_PATH, file)
 
-    file_path = os.path.join(OUTPUT_PATH, file)
+        with open(INPUT_FILE) as f:
+            data = json.load(f)
+            df = pd.json_normalize(data["data"])
 
-    with open(INPUT_FILE) as f:
-        data = json.load(f)
-        df = pd.json_normalize(data["data"])
+        output_file = file_path + ".csv"
+        df.to_csv(output_file, index=False)
+        logger.info(f"File saved: {output_file}")
+        return output_file
+    except FileNotFoundError as e:
+        logger.error(f"Error --- {e}")
 
-    df.to_csv(file_path + ".csv", index=False)
+
+def load_teams(file):
+    try:
+        update_table_with_pk(file, "raw_teams", "id")
+        logger.info(f"✅ File {file} has been loaded in nhl_raw.raw_teams")
+        return file
+    except Exception as e:
+        logger.error(f"Failed to load {file} --- {e}")
 
 
-@track_time
-def load_teams():
-    truncate_and_load_table("data/csv_data/raw/single/raw_teams.csv", "raw_teams")
+def run():
+    start_time = time.time()
+
+    try:
+        extract_teams()
+        load_file = transform_teams()
+
+        if load_file:
+            load_teams(load_file)
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        minutes = int(elapsed_time // 60)
+        seconds = elapsed_time % 60
+        logger.info(
+            f"✅✅✅ Pipeline completed successfully in {minutes}min {seconds:.0f}s."
+        )
+
+    except Exception as e:
+        logger.error(f"❌❌❌ Pipeline failed --- {e}")
 
 
 if __name__ == "__main__":
-    extract_teams()
-    transform_teams()
-    load_teams()
+    run()
     pass

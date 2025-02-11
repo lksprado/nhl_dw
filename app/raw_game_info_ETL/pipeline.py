@@ -43,7 +43,7 @@ def extract_game_info():
 
 def transform_game_info():
     INPUT_FILE = "data/json_data/single/raw_game_info.json"
-    OUTPUT_DIR = "data/csv_data/raw/single"
+    OUTPUT_DIR = "data/csv_data/processed/flow_loads"
 
     try:
         file = os.path.basename(INPUT_FILE)

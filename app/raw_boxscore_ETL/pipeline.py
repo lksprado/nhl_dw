@@ -107,7 +107,7 @@ def transform_boxscore_games():
                 df.to_csv(output_file, index=False)
                 logger.info(f"File saved: {output_file}")
         except Exception as e:
-            print(f"Error --- {e}")
+            logger.error(f"Error --- {e}")
 
 
 def append_boxscore_game():

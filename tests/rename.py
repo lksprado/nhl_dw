@@ -1,7 +1,7 @@
 import os
 
 # Defina o diretório onde os arquivos estão localizados
-directory = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_game_log"
+directory = "/media/lucas/Files/2.Projetos/nhl-dw/data/csv_data/raw/raw_player_info"
 
 # Percorrer todos os arquivos no diretório
 for filename in os.listdir(directory):

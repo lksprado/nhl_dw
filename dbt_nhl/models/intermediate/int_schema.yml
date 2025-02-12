@@ -1,10 +1,8 @@
 models:
   - name: int_dime_teams
     description: "Combines information on the NHL teams and their current status"
-  - name: int_dime_player
+  - name: int_dime_players
     description: "Player characterists"
-  - name: int_dime_player_current_stats
-    description: "Player Current Stats"
   - name: int_fct_games
     descripition: "All games results"
     columns:
@@ -16,7 +14,9 @@ models:
 
   - name: int_fct_team_stats
     description: "All team stats"
-  - name: int_fct_player_games
-    description: "All games results per player"
   - name: int_fct_play_by_play
     description: "All plays"
+  - name: int_fct_skaters
+    descriptions: "Skaters stats per season + fighting"
+  - name: int_fct_goalies
+    descriptions: "Goalies stats per season + fighting"

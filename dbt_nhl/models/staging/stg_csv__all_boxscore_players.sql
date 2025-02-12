@@ -20,7 +20,7 @@ renamed as (
     {{ string_to_int('blockedshots') }} as blocked_shots,
     {{ string_to_int('shifts') }} as shifts,
     {{ string_to_int('giveaways') }} as giveaways,
-    {{ string_to_int('takeaways') }} as takeways,
+    {{ string_to_int('takeaways') }} as takeaways,
     {{ string_to_int('evenstrengthgoalsagainst') }} as even_strenght_goals_against,
     {{ string_to_int('powerplaygoalsagainst') }} as powerplay_goals_against,
     {{ string_to_int('shorthandedgoalsagainst') }} as shorthanded_goals_against,

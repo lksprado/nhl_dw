@@ -23,7 +23,7 @@ renamed as (
     intop100alltime::bool as in_top100_alltime,
     inhhof:: bool as in_hall_of_fame,
     {{ string_to_int('featuredstats_season') }} as latest_season,
-    currentteamabbrev as current_team_id,
+    currentteamabbrev as current_team_trid,
     {{ string_to_int('draftdetails_overallpick') }} as  draft_overall_pick,
     {{ string_to_int('draftdetails_pickinround') }} as  draft_pickinround,
     {{ string_to_int('draftdetails_round') }} as  draft_round,

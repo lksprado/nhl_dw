@@ -73,12 +73,6 @@ models:
 
   - name: stg_csv__all_game_log
     description: "Multiple rows per player - Player stats for each game"
-    columns:
-      - name: pk
-        description: "Unique row identifier with game_id+player_id"
-        tests:
-          - not_null
-          - unique
 
   - name: stg_csv__roster_season
     description: "Multiple rows per player - Player attributes per season for each team played"

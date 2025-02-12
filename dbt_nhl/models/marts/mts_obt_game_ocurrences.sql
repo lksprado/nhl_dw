@@ -7,6 +7,7 @@ plays as (
         when SUBSTRING(game_id::text from 5 for 2) = '03' then 'playoffs'
     end as game_type,
     event_description,
+    penalty_description,
     event_team_id,
     count(game_id) as qt_events
     from {{ ref('int_fct_play_by_play') }}
@@ -16,6 +17,7 @@ plays as (
         when SUBSTRING(game_id::text from 5 for 2) = '02' then 'regular'
         when SUBSTRING(game_id::text from 5 for 2) = '03' then 'playoffs'
     end,
+    penalty_description,
     event_description,
     event_team_id
 ),
@@ -29,6 +31,7 @@ t2.team_trid,
 t2.full_name,
 t2.short_name,
 event_description,
+penalty_description,
 qt_events
 from plays t
 left join teams t2

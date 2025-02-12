@@ -4,7 +4,7 @@ club_stats as (
     season_id,
     max(games_played) as games_played_game_type,
     game_type,
-    team_id,
+    team_trid,
     sum(goals) as goals,
     sum(assists) as assists,
     sum(points) as player_points,
@@ -29,6 +29,6 @@ club_stats as (
     group by
     season_id,
     game_type,
-    team_id
+    team_trid
 )
 select * from club_stats

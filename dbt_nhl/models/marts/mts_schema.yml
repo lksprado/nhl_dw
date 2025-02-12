@@ -7,10 +7,9 @@ models:
           - unique
           - not_null
 
-  - name: 'mts_obt_player_results'
-    description: "Complete game results and identification per player - INCREMENTAL"
   - name: 'mts_obt_team_stats'
     description: "All team stats per season"
-  - name: 'mts_obt_player_career'
-    description: "Player career stats"
-  - name: 'mts_obt_play_by_play'
+  - name: 'mts_obt_game_ocurrences'
+    description: "Count of ocurrences from play by play per team"
+  - name: 'mts_obt_goalies'
+  - name: 'mts_obt_skaters'

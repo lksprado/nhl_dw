@@ -73,7 +73,55 @@ def transform_player_info():
 
             with open(input_file) as f:
                 data = json.load(f)
-                df = pd.json_normalize(data)
+                try:
+                    df = pd.json_normalize(data[0])
+                except Exception:
+                    df = pd.json_normalize(data)
+
+            columns_to_drop = [
+                "badges",
+                "teamLogo",
+                "heroImage",
+                "playerSlug",
+                "shopLink",
+                "twitterLink",
+                "watchLink",
+                "last5Games" "seasonTotals",
+                "currentTeamRoster",
+                "fullTeamName.fr",
+                "awards",
+                "birthStateProvince.fr",
+                "firstName.cs",
+                "firstName.fi",
+                "firstName.sk",
+                "lastName.cs",
+                "lastName.fi",
+                "lastName.sk",
+                "birthCity.cs",
+                "birthCity.de",
+                "birthCity.fi",
+                "birthCity.fr",
+                "birthCity.sk",
+                "birthCity.sv",
+                "teamCommonName.fr",
+                "birthStateProvince.sk",
+                "firstName.de",
+                "firstName.es",
+                "firstName.sv",
+                "lastName.de",
+                "lastName.sv",
+                "birthStateProvince.sv",
+                "lastName.es",
+                "firstName.fr",
+                "lastName.fr",
+                "last5games",
+                "seasontotals",
+            ]
+
+            df = df.drop(
+                columns=[col for col in columns_to_drop if col in df.columns],
+                errors="ignore",
+            )
 
             df["filename"] = file
             output_file = file_path + ".csv"

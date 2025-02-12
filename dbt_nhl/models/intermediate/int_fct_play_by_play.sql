@@ -65,7 +65,8 @@ pbp.away_sog_at,
 pbp.home_sog_at,
 pbp.assist_2_player_season_total,
 pbp.home_defending_side,
-pbp.details_highlight_clip_sharing_url
+pbp.details_highlight_clip_sharing_url,
+pbp.sk
 from pbp
 left join  players p
 on pbp.penalty_by_player_id = p.player_id

@@ -3,7 +3,7 @@ with source as (
   ),
   renamed as (
       select
-        SUBSTRING(filename FROM 5 FOR 10)::int as game_id,
+        SUBSTRING(filename FROM 1 FOR 10)::int as game_id,
         referee_1,
         referee_2,
         referee_3,

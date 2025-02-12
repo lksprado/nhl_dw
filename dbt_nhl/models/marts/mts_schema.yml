@@ -1,14 +1,14 @@
 models:
-  - name: 'mts_obt_game_results'
-    description: "Complete game results and identifications - INCREMENTAL"
-    columns:
-      - name: 'game_id'
-        tests:
-          - unique
-          - not_null
-      - name: 'home_sog'
-        tests:
-          - not_null
+  # - name: 'mts_obt_game_results'
+  #   description: "Complete game results and identifications - INCREMENTAL"
+  #   columns:
+  #     - name: 'game_id'
+  #       tests:
+  #         - unique
+  #         - not_null
+  #     - name: 'home_sog'
+  #       tests:
+  #         - not_null
   - name: 'mts_obt_player_results'
     description: "Complete game results and identification per player - INCREMENTAL"
   - name: 'mts_obt_team_stats'

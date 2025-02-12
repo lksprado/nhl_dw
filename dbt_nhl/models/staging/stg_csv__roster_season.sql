@@ -3,22 +3,22 @@ with source as (
   ),
   renamed as (
       select
-        {{ string_to_int ('"id"') }} as player_id,
-        "firstName.default" as first_name,
-        "lastName.default" as last_name,
-        SUBSTRING("filename" FROM  12 FOR 3) AS team_id,
-        {{ string_to_int('RIGHT("filename", 8)') }} AS season_id,
-        "positionCode" ,
-        "sweaterNumber" as jersey_number,
-        "shootsCatches" as shoots_or_catches,
-        "birthDate" as birth_date,
-        "birthCountry"  as birth_country,
-        "birthCity.default" as birth_city,
-        {{ string_to_int ('"heightInCentimeters"') }} as height_centimeters,
-        {{ string_to_int ('"heightInInches"') }} as height_inches,
-        {{ string_to_int ('"weightInKilograms"') }} as weight_kg,
-        {{ string_to_int ('"weightInPounds"') }} as weight_pounds,
-        "headshot" as pic_url
+        {{ string_to_int ('id') }} as player_id,
+        firstname_default as first_name,
+        lastname_default as last_name,
+        substring(filename from  12 for 3) as team_id,
+        {{ string_to_int('right(filename, 8)') }} as season_id,
+        positioncode ,
+        sweaternumber as jersey_number,
+        shootscatches as shoots_or_catches,
+        birthdate as birth_date,
+        birthcountry  as birth_country,
+        birthcity_default as birth_city,
+        {{ string_to_int ('heightincentimeters') }} as height_centimeters,
+        {{ string_to_int ('heightininches') }} as height_inches,
+        {{ string_to_int ('weightinkilograms') }} as weight_kg,
+        {{ string_to_int ('weightinpounds') }} as weight_pounds,
+        headshot as pic_url
       from source
   )
   select

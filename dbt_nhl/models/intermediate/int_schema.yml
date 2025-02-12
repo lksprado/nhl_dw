@@ -3,13 +3,20 @@ models:
     description: "Combines information on the NHL teams and their current status"
   - name: int_dime_player
     description: "Player characterists"
-  - name: "int_dime_player_current_stats"
+  - name: int_dime_player_current_stats
     description: "Player Current Stats"
-  - name: "int_fct_games"
+  - name: int_fct_games
     descripition: "All games results"
-  - name: "int_fct_team_stats"
+    columns:
+      - name: game_id
+        description: "Unique identifier"
+        tests:
+          - not_null
+          - unique
+
+  - name: int_fct_team_stats
     description: "All team stats"
-  - name: "int_fct_player_games"
+  - name: int_fct_player_games
     description: "All games results per player"
-  - name: "int_fct_play_by_play"
+  - name: int_fct_play_by_play
     description: "All plays"

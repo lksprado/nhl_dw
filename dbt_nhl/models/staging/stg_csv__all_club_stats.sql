@@ -6,15 +6,16 @@ with source as (
     concat("playerid","season","gametype") as sk_playerid_seasonid_gametypeid,
     cast("playerid" as int) as player_id,
     cast("season" as int) as season_id,
+    SUBSTRING(filename from 16 for 3) as team_trid,
     case
       when positioncode is null and gamesstarted is not null or saves is not null then 'G'
       else positioncode
     end  as position_code,
     {{ string_to_int('gamesplayed') }} as games_played,
     case
-        when {{ string_to_int('gametype') }} = 1 then 'pre_season'
-        when {{ string_to_int('gametype') }} = 2 then 'regular_season'
-        when {{ string_to_int('gametype') }} = 3 then 'post_season'
+        when {{ string_to_int('gametype') }} = 1 then 'pre'
+        when {{ string_to_int('gametype') }} = 2 then 'regular'
+        when {{ string_to_int('gametype') }} = 3 then 'playoffs'
     end as game_type,
     {{ string_to_int('gametype') }} as game_type_id,
     {{ string_to_int('goals') }} as goals,

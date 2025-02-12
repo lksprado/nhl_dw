@@ -15,12 +15,14 @@ teams AS (
 	team_id,
 	team_code
 	FROM {{ ref('stg_csv__teams') }}
+	),
+season_teams as (
+	SELECT
+	s.season_id,
+	t.team_id,
+	s.game_type
+	FROM seasons s
+	LEFT JOIN teams t
+	ON s.home_team_id = t.team_code
+	ORDER BY t.team_id, s.season_id
 	)
-SELECT
-s.season_id,
-t.team_id,
-s.game_type
-FROM seasons s
-LEFT JOIN teams t
-ON s.home_team_id = t.team_code
-ORDER BY t.team_id, s.season_id

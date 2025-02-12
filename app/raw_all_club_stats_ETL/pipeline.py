@@ -127,9 +127,8 @@ def transform_club_stats():
         except Exception as e:
             logger.error(f"Error -- {e}")
 
-        number_of_files = len(os.listdir(OUTPUT_DIR))
-        logger.info(f"{number_of_files} files saved: {file_path}")
-        logger.info("Step 2/5 completed")
+    number_of_files = len(os.listdir(OUTPUT_DIR))
+    logger.info(f"{number_of_files} files saved: {file_path}")
 
 
 def append_club_stats():
@@ -145,7 +144,6 @@ def append_club_stats():
             f"{OUTPUT_FILE_NAME}_{today}", INPUT_CSV_DIR, OUTPUT_CSV_DIR
         )
         logger.info(f"File {OUTPUT_FILE_NAME} created succesfuly in {OUTPUT_CSV_DIR}")
-        logger.info("Step 3/5 completed")
         return appended_file
 
     except FileNotFoundError as e:
@@ -161,7 +159,6 @@ def load_club_stats(file):
             ["playerid", "gamesplayed", "positioncode"],
         )
         logger.info(f"✅ File {file} has been loaded in nhl_raw.raw_all_club_stats")
-        logger.info("Step 4/5 completed")
         return file
     except Exception as e:
         logger.error(f"Failed to load {file} --- {e}")
@@ -202,7 +199,6 @@ def clear_staging_landing_loading(file):
         source_path = os.path.join(LOAD_DIR, file_only)
         destination_path = os.path.join(STORED_LOADS, file_only)
         shutil.move(source_path, destination_path)
-        logger.info("Step 5/5 completed")
     except FileNotFoundError as e:
         logger.warning(f"Failed to move loaded csv file -- {e}")
 

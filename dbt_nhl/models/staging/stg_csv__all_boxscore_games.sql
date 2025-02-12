@@ -7,8 +7,8 @@ renamed as (
     {{ string_to_int ('id') }} as game_id,
     {{ string_to_int ('season') }} as season_id,
     case
-        when {{ string_to_int ('gametype') }} = 2 then 'regular season'
-        when {{ string_to_int ('gametype') }} = 3 then 'post season'
+        when {{ string_to_int ('gametype') }} = 2 then 'regular'
+        when {{ string_to_int ('gametype') }} = 3 then 'playoffs'
     end as game_type,
     {{ string_to_int ('gametype') }} as game_type_id,
     to_date(gamedate,'YYYY-MM-DD') as game_date,
@@ -19,8 +19,8 @@ renamed as (
     venuelocation_default as city,
     gameoutcome_lastperiodtype as outcome_last_period_type,
     {{ string_to_int ('gameoutcome_otperiods') }} as outcome_ot_periods,
-    {{ string_to_int ('awayteam_id') }} as away_team_code,
-    {{ string_to_int ('hometeam_id') }} as home_team_code,
+    {{ string_to_int ('awayteam_id') }} as away_team_id,
+    {{ string_to_int ('hometeam_id') }} as home_team_id,
     {{ string_to_int ('awayteam_score') }} as away_score,
     {{ string_to_int ('hometeam_score') }} as home_score,
     {{ string_to_int ('awayteam_sog') }} as away_sog,

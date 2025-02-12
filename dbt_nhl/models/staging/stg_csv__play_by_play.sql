@@ -45,7 +45,7 @@ with source as (
       {{ string_to_int('details_committedbyplayerid') }} as penalty_by_player_id,
       {{ string_to_int('details_drawnbyplayerid') }} as penalty_drawn_by_player_id,
       {{ string_to_int('details_servedbyplayerid') }} as penalty_served_by_player_id,
-      {{ string_to_int('details_eventownerteamid') }} as event_teamid,
+      {{ string_to_int('details_eventownerteamid') }} as event_team_id,
       {{ string_to_int('details_scoringplayerid') }} as scoring_player_id,
       {{ string_to_int('details_scoringplayertotal') }} as scoring_player_season_total,
       {{ string_to_int('details_goalieinnetid') }} as goalie_in_net_player_id,

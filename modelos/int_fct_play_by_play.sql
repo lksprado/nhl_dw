@@ -4,6 +4,9 @@ pbp as (
 ),
 players as (
     select * from {{ ref('stg_csv__player_info') }}
+),
+teams as (
+    select * from {{ ref('stg_csv__teams') }}
 )
 select
 pbp.game_id,
@@ -16,13 +19,14 @@ pbp.event_code,
 pbp.event_description,
 pbp.event_reason,
 pbp.event_secondary_reason,
-pbp.event_team_id,
 pbp.penalty_type,
 pbp.penalty_description,
 pbp.penalty_duration,
 p.full_name as penalty_by,
 p2.full_name as penalty_drawn_by,
 p3.full_name as penalty_served_by,
+t.full_name as event_team,
+t.team_id as event_team_id,
 p4.full_name as scoring_by,
 pbp.scoring_player_season_total,
 p5.full_name as goalie_in_net,
@@ -77,3 +81,5 @@ left join  players p13
 on pbp.shooting_player_id = p13.player_id
 left join  players p14
 on pbp.event_player_id = p14.player_id
+-- left join teams t
+-- on pbp.event_teamid = t.team_code

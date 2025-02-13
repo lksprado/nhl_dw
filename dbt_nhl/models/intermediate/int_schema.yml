@@ -11,7 +11,6 @@ models:
         tests:
           - not_null
           - unique
-
   - name: int_fct_team_stats
     description: "All team stats"
   - name: int_fct_play_by_play

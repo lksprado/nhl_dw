@@ -21,8 +21,14 @@ Esse projeto foi um excelente exercício de engenharia de dados e reafirmou a im
 ### Pipeline Design
 ![alt text](image.png)
 
+### Modelagem
+![alt text](image-1.png)
+
 ### Próximos passos
 A orquestração via Airflow
+
 Refactor com uso de Cloud;
+
 Realizar mais testes unitários;
+
 Utilizar Spark para o processamento de dados históricos;

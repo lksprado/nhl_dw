@@ -13,3 +13,4 @@ models:
     description: "Count of ocurrences from play by play per team"
   - name: 'mts_obt_goalies'
   - name: 'mts_obt_skaters'
+  - name: 'mts_obt_play_by_play'

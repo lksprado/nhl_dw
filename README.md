@@ -1,16 +1,28 @@
-# nhl_dw
-Se tem um projeto que alavancou habilidades técnicas foi esse.
-Talvez os dados de esportes sejam os mais completos, dinâmicos, relativamente complexos e quentes que se possa encontrar, e nessa ocasião apresento os da NHL.
-Através de uma API com dezenas de endpoints fiz todo um trabalho de garimpar quais endpoints seriam interessantes, quais se tornaram redudantes, a documentação ajudou e muito até certo ponto
-depois disso exigiu muito pensamento analítico, principalmente para a modelagem.
-Minha experiência como analista foi crucial pois do começo ao fim eu já tinha em mente como e quais dados eu gostaria de visualizar para analisar.
-No entanto, no universo da engenharia é sempre preciso lidar com situações inesperadas e pensar à frente na otimização. Alguns insights e desafios que enfrentei:
- - A importância da modularização de código mas também com a organização;
- - Extração e processamento de dados volumosos é demorado senão aplicar técnicas de paralelismo;
- - Testes unitários pelo menos para checar o output;
- - A primeira carga de dados é sempre mais volumosa e requer utilizar os métodos corretos como COPY ao invés de INSERT;
- - Como garantir consistência nos dados evitar duplicação
- - Modelagem requer uma atenção especial e o dbt é essencial para manter uma documentação mínima e funcional para que os modelos sejam significativos
- - Após a primeira carga como estabilizar e concatenar dados incompletos e atualizados
- - Como reprocessar e recarregar um processo sem onerar a memória e gastar tempo com arquivos já processados. Tabelas que foram carregadas em dias diferentes em algum momento teriam de estar sincronizadas
- - integridade de dados
+# Construindo um Data Warehouse com Dados da NHL
+### Motivação
+Dediquei 1 mês de horas livres para construir um Data Warehouse com dados de API's da NHL e foi um desafio empolgante. Os dados esportivos estão entre os mais completos, dinâmicos e relativamente complexos, o que exigiu um trabalho minucioso de coleta, modelagem, otimização e versionamento dos pipelines e modelos de dados, nada menos que o esperado na realidade corporativa.
+A ideia central era transformar dados brutos da NHL em um modelo organizado e eficiente para diversas análises rodando localmente, e o momento foi oportuno com a pausa na liga para o torneio mundial nas próximas 2 semanas.
+
+### Desafios
+Ao longo do projeto, tive que lidar com diversas questões fundamentais para garantir que o DW fosse escalável, eficiente e confiável:
+
+- **Coleta de dados:** A API da NHL oferece dezenas de endpoints, mas nem todos eram relevantes. Foi necessário um trabalho analítico para filtrar o que realmente importava e lidar com uma documentação limitada;
+
+- **Modelagem de dados:** A estruturação correta dos dados é essencial para evitar redundância e garantir consistência. O uso do dbt se mostrou crucial para documentar e manter os modelos bem organizados bem como uso de surrogate keys;
+
+- **Otimização de carga:** A primeira carga de dados é sempre mais volumosa, e utilizar comandos como COPY ao invés de INSERT fez uma grande  diferença no tempo de execução.
+
+- **Performance e paralelismo:** A extração e o processamento de grandes volumes de dados podem ser demorados sem técnicas de paralelismo;
+
+- **Gestão da integridade dos dados:** Garantir que os dados estavam consistentes, sem duplicidades e corretamente sincronizados entre tabelas carregadas em dias diferentes foi um desafio crítico, já que novos jogos foram acontecendo e mais dados e estatísticas precisam ser atualizadas e equalizadas;
+
+Esse projeto foi um excelente exercício de engenharia de dados e reafirmou a importância de pensar além da análise: a otimização da carga, a confiabilidade dos dados e a escalabilidade do sistema são aspectos fundamentais.
+
+### Pipeline Design
+![alt text](image.png)
+
+### Próximos passos
+A orquestração via Airflow
+Refactor com uso de Cloud;
+Realizar mais testes unitários;
+Utilizar Spark para o processamento de dados históricos;

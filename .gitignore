@@ -4,17 +4,18 @@
 data
 teste
 trash
-
+.user.yml
 __init__.py
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+portry.lock
 
 # C extensions
 *.so
-
+pyproject.toml
 # Distribution / packaging
 .Python
 build/
@@ -151,6 +152,9 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+modelos/
+
 
 # Pyre type checker
 .pyre/

@@ -18,6 +18,10 @@ Ao longo do projeto, tive que lidar com diversas questões fundamentais para gar
 
 Esse projeto foi um excelente exercício de engenharia de dados e reafirmou a importância de pensar além da análise: a otimização da carga, a confiabilidade dos dados e a escalabilidade do sistema são aspectos fundamentais.
 
+### Projeto Geral
+![alt text](image-2.png)
+
+
 ### Pipeline Design
 ![alt text](image.png)
 

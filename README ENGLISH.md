@@ -6,17 +6,20 @@ Challenges
 
 Throughout the project, I had to deal with several fundamental issues to ensure that the DW was scalable, efficient, and reliable:
 
-- Data Collection: The NHL API offers dozens of endpoints, but not all were relevant. An analytical approach was required to filter what truly mattered while dealing with limited documentation.
+- **Data Collection:** The NHL API offers dozens of endpoints, but not all were relevant. An analytical approach was required to filter what truly mattered while dealing with limited documentation.
 
-- Data Modeling: Proper data structuring is essential to avoid redundancy and ensure consistency. Using dbt proved crucial for documenting and maintaining well-organized models, along with the use of surrogate keys.
+- **Data Modeling:** Proper data structuring is essential to avoid redundancy and ensure consistency. Using dbt proved crucial for documenting and maintaining well-organized models, along with the use of surrogate keys.
 
-- Load Optimization: The first data load is always the heaviest, and using commands like COPY instead of INSERT made a significant difference in execution time.
+- **Load Optimization:** The first data load is always the heaviest, and using commands like COPY instead of INSERT made a significant difference in execution time.
 
-- Performance and Parallelism: Extracting and processing large volumes of data can be time-consuming without parallelism techniques.
+- **Performance and Parallelism:** Extracting and processing large volumes of data can be time-consuming without parallelism techniques.
 
-- Data Integrity Management: Ensuring data consistency, avoiding duplicates, and properly synchronizing tables loaded on different days was a critical challenge, as new games were played, and more data and statistics needed to be updated and reconciled.
+- **Data Integrity Management:** Ensuring data consistency, avoiding duplicates, and properly synchronizing tables loaded on different days was a critical challenge, as new games were played, and more data and statistics needed to be updated and reconciled.
 
 This project was an excellent exercise in data engineering and reaffirmed the importance of thinking beyond analysis: optimizing load times, ensuring data reliability, and ensuring system scalability are key aspects.
+
+## Project Overview
+![alt text](image-3.png)
 
 ### Pipeline Design
 ![alt text](image.png)

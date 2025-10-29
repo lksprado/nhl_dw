@@ -30,5 +30,28 @@ club_stats as (
     season_id,
     game_type,
     team_trid
+),
+fights as (
+    SELECT
+    concat(((SUBSTRING(game_id::text from 1 for 4)::int)-1)::text,(SUBSTRING(game_id::text from 1 for 4)::int)::text)::int as season_id,
+    game_id,
+    count(penalty_by_player_id) AS fights
+    FROM
+    {{ref('stg_csv__play_by_play')}}
+    WHERE
+    penalty_description = 'fighting'
+    GROUP BY
+    concat(((SUBSTRING(game_id::text from 1 for 4)::int)-1)::text,(SUBSTRING(game_id::text from 1 for 4)::int)::text)::int,
+    penalty_by_player_id,
+    game_id
+),
+game_info as (
+  select
+  game_id,
+  game_type,
+  home_team_id,
+  away_team_id
+  from {{ref('stg_csv__playby_play') }} t1
+  left join {{ref}}
 )
 select * from club_stats
